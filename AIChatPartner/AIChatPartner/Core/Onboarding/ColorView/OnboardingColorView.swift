@@ -24,6 +24,7 @@ struct OnboardingColorView: View {
                 .background(Color(uiColor: .systemBackground))
         }
         .animation(.bouncy, value: selectedColor)
+        .toolbar(.hidden, for: .navigationBar)
     }
 
     private var gridView: some View {
@@ -57,9 +58,9 @@ struct OnboardingColorView: View {
 
     private var button: some View {
         ZStack {
-            if selectedColor != nil {
+            if let selectedColor {
                 NavigationLink {
-                    OnboardingCompletedView()
+                    OnboardingCompletedView(selectedColor: selectedColor)
                 } label: {
                     Text("Continue")
                         .callToActionButton()
@@ -74,4 +75,5 @@ struct OnboardingColorView: View {
     NavigationStack {
         OnboardingColorView()
     }
+    .environment(AppState())
 }
