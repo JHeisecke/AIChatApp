@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		00998C4F2D32D30100B49DF8 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 00998C4E2D32D30100B49DF8 /* SDWebImageSwiftUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		0089D4532D30806B0056B465 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00998C4F2D32D30100B49DF8 /* SDWebImageSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,6 +118,7 @@
 			);
 			name = AIChatPartner;
 			packageProductDependencies = (
+				00998C4E2D32D30100B49DF8 /* SDWebImageSwiftUI */,
 			);
 			productName = AIChatPartner;
 			productReference = 0089D4422D3080690056B465 /* AIChatPartner.app */;
@@ -198,6 +204,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				0089D4762D3084890056B465 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+				00998C4D2D32D30100B49DF8 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0089D4432D3080690056B465 /* Products */;
@@ -612,7 +619,23 @@
 				minimumVersion = 0.57.1;
 			};
 		};
+		00998C4D2D32D30100B49DF8 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		00998C4E2D32D30100B49DF8 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00998C4D2D32D30100B49DF8 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0089D43A2D3080690056B465 /* Project object */;
 }
