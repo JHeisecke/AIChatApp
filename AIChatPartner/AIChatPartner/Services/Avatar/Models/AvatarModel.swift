@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct AvatarModel {
+struct AvatarModel: Hashable {
 
     let avatarId: String
     let name: String?
@@ -134,7 +134,7 @@ extension AvatarModel {
                 characterLocation: .mall,
                 authorId: UUID().uuidString,
                 dateCreated: .now
-            ),
+            )
         ]
     }
     
