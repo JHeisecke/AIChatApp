@@ -11,18 +11,25 @@ struct ExploreView: View {
 
     @State private var featureAvatars: [AvatarModel] = AvatarModel.mocks
     @State private var categories: [CharacterOption] = CharacterOption.allCases
+    @State private var popularAvatars: [AvatarModel] = AvatarModel.mocks
 
     var body: some View {
         NavigationStack {
             List {
-                featuredSection
-                categoriesSection
+                Group {
+                    featuredSection
+                    categoriesSection
+                    popularSection
+                }
+                .removeListRowFormatting()
             }
             .navigationTitle(
                 "Explore"
             )
         }
     }
+
+    // MARK: - Featured Section
 
     private var featuredSection: some View {
         Section(
@@ -37,14 +44,18 @@ struct ExploreView: View {
                             imageName: avatar.profileImageName
                         )
                     }
+                    .anyButton {
+
+                    }
                 }
-                .removeListRowFormatting()
             },
             header: {
 
             }
         )
     }
+
+    // MARK: - Categories Section
 
     private var categoriesSection: some View {
         Section(
@@ -66,7 +77,28 @@ struct ExploreView: View {
                     .scrollTargetBehavior(.viewAligned)
 
                 }
-                .removeListRowFormatting()
+            },
+            header: {
+
+            }
+        )
+    }
+
+    // MARK: - Popular Section
+
+    private var popularSection: some View {
+        Section(
+            content: {
+                ForEach(popularAvatars, id: \.self) { avatar in
+                    CustomListCellView(
+                        imageName: avatar.profileImageName,
+                        title: avatar.name,
+                        subtitle: avatar.characterDescription
+                    )
+                    .anyButton(.highlight) {
+
+                    }
+                }
             },
             header: {
 

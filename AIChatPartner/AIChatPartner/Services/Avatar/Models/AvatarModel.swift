@@ -44,13 +44,26 @@ struct AvatarModel: Hashable {
     }
 }
 
+// MARK: - CharacterOption
+
 enum CharacterOption: String, CaseIterable, Hashable {
     case man, woman, alien, dog, cat
 
     static var `default`: Self {
         .man
     }
+
+    var startsWithVowel: Bool {
+        switch self {
+        case .alien:
+            true
+        default:
+            false
+        }
+    }
 }
+
+// MARK: - CharacterAction
 
 enum CharacterAction: String {
     case smiling, sitting, eating, drinking, walking, shopping, studying, working, relaxing, fighting, crying
@@ -60,6 +73,8 @@ enum CharacterAction: String {
     }
 }
 
+// MARK: - CharacterLocation
+
 enum CharacterLocation: String {
     case park, mall, museum, city, desert, forest, space
 
@@ -67,6 +82,8 @@ enum CharacterLocation: String {
         .park
     }
 }
+
+// MARK: - AvatarDescriptionBuilder
 
 struct AvatarDescriptionBuilder {
     let characterOption: CharacterOption
@@ -86,7 +103,8 @@ struct AvatarDescriptionBuilder {
     }
 
     var characterDescription: String {
-        "A \(characterOption.rawValue) that is \(characterAction.rawValue) in the \(characterLocation.rawValue)"
+        let prefix = characterOption.startsWithVowel ? "An" : "A"
+        return "\(prefix) \(characterOption.rawValue) that is \(characterAction.rawValue) in the \(characterLocation.rawValue)"
     }
 }
 

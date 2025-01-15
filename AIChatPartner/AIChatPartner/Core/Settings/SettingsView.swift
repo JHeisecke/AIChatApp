@@ -36,4 +36,5 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView()
+        .environment(AppState())
 }

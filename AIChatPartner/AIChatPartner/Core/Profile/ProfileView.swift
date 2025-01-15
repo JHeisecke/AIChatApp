@@ -41,5 +41,8 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView()
+    NavigationStack {
+        ProfileView()
+    }
+    .environment(AppState())
 }
