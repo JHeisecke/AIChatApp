@@ -30,6 +30,11 @@ struct ChatMessageModel {
         self.seenByIds = seenByIds
         self.dateCreated = dateCreated
     }
+
+    func hasBeenSeenBy(userId: String) -> Bool {
+        guard let seenByIds else { return false }
+        return seenByIds.contains(userId)
+    }
 }
 
 // MARK: - Mocks
