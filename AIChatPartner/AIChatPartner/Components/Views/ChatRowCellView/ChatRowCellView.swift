@@ -1,6 +1,6 @@
 //
 //  ChatRowCellView.swift
-//  AIChatPartner
+//  AIChatCourse
 //
 //  Created by Javier Heisecke on 2025-01-15.
 //
@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct ChatRowCellView: View {
-
-    var imageName: String?
-    var headline: String?
-    var subheadline: String?
-    var hasNewChat: Bool = false
-
+    
+    var imageName: String? = Constants.randomImage
+    var headline: String? = "Alpha"
+    var subheadline: String? = "This is the last message in the chat."
+    var hasNewChat: Bool = true
+    
     var body: some View {
         HStack(spacing: 8) {
-            Group {
+            ZStack {
                 if let imageName {
                     ImageLoaderView(urlString: imageName)
                 } else {
@@ -26,7 +26,7 @@ struct ChatRowCellView: View {
             }
             .frame(width: 50, height: 50)
             .clipShape(Circle())
-
+            
             VStack(alignment: .leading, spacing: 4) {
                 if let headline {
                     Text(headline)
@@ -39,7 +39,7 @@ struct ChatRowCellView: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-
+            
             if hasNewChat {
                 Text("NEW")
                     .badgeLabel()
@@ -47,20 +47,25 @@ struct ChatRowCellView: View {
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 8)
-        .background(Color(uiColor: .systemBackground))
+        .background(Color(uiColor: UIColor.systemBackground))
     }
 }
 
 #Preview {
     ZStack {
-        Color.gray.opacity(0.3).ignoresSafeArea()
+        Color.gray.ignoresSafeArea()
+        
         List {
-            Group {
-                ChatRowCellView(imageName: Constants.randomImage, headline: "Alpha", subheadline: "this is the last message in the chat.", hasNewChat: true)
-                ChatRowCellView(imageName: Constants.randomImage, headline: "Chat", subheadline: "this is the last message in the chat.", hasNewChat: false)
-                ChatRowCellView(imageName: nil, headline: "Alpha", subheadline: "this is the last message in the chat.", hasNewChat: true)
-            }
-            .removeListRowFormatting()
+            ChatRowCellView()
+                .removeListRowFormatting()
+            ChatRowCellView(hasNewChat: false)
+                .removeListRowFormatting()
+            ChatRowCellView(imageName: nil)
+                .removeListRowFormatting()
+            ChatRowCellView(headline: nil, hasNewChat: false)
+                .removeListRowFormatting()
+            ChatRowCellView(subheadline: nil, hasNewChat: false)
+                .removeListRowFormatting()
         }
     }
 }

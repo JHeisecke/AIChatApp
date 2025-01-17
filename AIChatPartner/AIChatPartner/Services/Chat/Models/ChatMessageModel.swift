@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ChatMessageModel {
+struct ChatMessageModel: Identifiable {
     let id: String
     let chatId: String
     let authorId: String?
@@ -35,48 +35,44 @@ struct ChatMessageModel {
         guard let seenByIds else { return false }
         return seenByIds.contains(userId)
     }
-}
 
-// MARK: - Mocks
-
-extension ChatMessageModel {
     static var mock: ChatMessageModel {
         mocks[0]
     }
 
     static var mocks: [ChatMessageModel] {
-        [
+        return [
             ChatMessageModel(
                 id: "msg1",
-                chatId: "chat1",
+                chatId: "1",
                 authorId: "user1",
                 content: "Hello, how are you?",
                 seenByIds: ["user2", "user3"],
-                dateCreated: Date.now(hours: -1)
+                dateCreated: Date.now
             ),
             ChatMessageModel(
                 id: "msg2",
-                chatId: "chat1",
+                chatId: "2",
                 authorId: "user2",
-                content: "I'm fine, thanks! How about you?",
-                seenByIds: ["user1", "user3"],
-                dateCreated: Date.now(hours: -2)
+                content: "I'm doing well, thanks for asking!",
+                seenByIds: ["user1"],
+                dateCreated: Date.now(days: -5)
             ),
             ChatMessageModel(
                 id: "msg3",
-                chatId: "chat2",
+                chatId: "3",
                 authorId: "user3",
-                content: "Hey, are we still meeting later?",
-                seenByIds: ["user1"],
-                dateCreated: Date.now(hours: -3)
+                content: "Anyone up for a game tonight?",
+                seenByIds: ["user1", "user2", "user4"],
+                dateCreated: Date.now(hours: -1)
             ),
             ChatMessageModel(
                 id: "msg4",
-                chatId: "chat2",
+                chatId: "1",
                 authorId: "user1",
-                content: "Yes, see you at 6 PM.",
+                content: "Sure, count me in!",
                 seenByIds: nil,
-                dateCreated: Date.now(hours: -4)
+                dateCreated: Date.now(hours: -2)
             )
         ]
     }

@@ -1,5 +1,25 @@
+# Archivo de configuración SwiftLint
+# Más información en: https://github.com/realm/SwiftLint
+
+# Reglas que se deben aplicar en todos los archivos
+# La lista completa de reglas se puede encontrar aquí:
+# https://github.com/realm/SwiftLint/blob/master/Rules.md
+
+opt_in_rules:
+ - line_length
+ - type_body_length
+ - file_length
+
+included:
+  - "**/*.swift"
+
 line_length:
   warning: 300  # Set a warning when lines exceed 300 characters
+  error: 400
+  ignores_urls: true
+  ignores_function_declarations: true
+  ignores_comments: true
+  ignores_interpolated_strings: true
 type_body_length:
   warning: 500  # Set a warning when a type body exceeds 500 lines
 file_length:
