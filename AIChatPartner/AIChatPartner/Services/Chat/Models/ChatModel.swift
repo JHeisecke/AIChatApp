@@ -18,11 +18,11 @@ struct ChatModel: Identifiable, Hashable {
 // MARK: - Mocks
 
 extension ChatModel {
-    static var mock: ChatModel {
+    static var mock: Self {
         mocks[0]
     }
 
-    static var mocks: [ChatModel] {
+    static var mocks: [Self] {
         [
             ChatModel(
                 id: "mock-1",
