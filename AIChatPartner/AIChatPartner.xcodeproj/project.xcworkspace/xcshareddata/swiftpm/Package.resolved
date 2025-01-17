@@ -1,5 +1,5 @@
 {
-  "originHash" : "fb50dca1a59005fbffe9c4615c436327725c9c8ecf14fce28ff3102226a12a33",
+  "originHash" : "70fc5a827c5e6475f38bf2bbe94a73ed5fd55ea8fa51cf70d94929cc7014ed0c",
   "pins" : [
     {
       "identity" : "sdwebimage",
@@ -17,6 +17,15 @@
       "state" : {
         "revision" : "451c6dfd5ecec2cf626d1d9ca81c2d4a60355172",
         "version" : "3.1.3"
+      }
+    },
+    {
+      "identity" : "swiftfulutilities",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftfulThinking/SwiftfulUtilities.git",
+      "state" : {
+        "revision" : "94c122e1e58cbcbe117200df211cf08ca6f5d6fb",
+        "version" : "1.1.6"
       }
     },
     {

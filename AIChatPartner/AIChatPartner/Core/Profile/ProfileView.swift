@@ -70,6 +70,7 @@ struct ProfileView: View {
             } else {
                 if isLoading {
                     ProgressView()
+                        .frame(maxWidth: .infinity, alignment: .center)
                 } else {
                     Text("Click + to create an avatar")
                         .padding()

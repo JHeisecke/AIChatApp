@@ -19,12 +19,12 @@ struct CarouselView<Model: Hashable, Content: View>: View {
                 LazyHStack(spacing: 0) {
                     ForEach(items, id: \.self) { item in
                         content(item)
-                        .scrollTransition(.interactive.threshold(.visible(0.95)), transition: { content, phase in
-                            content
-                                .scaleEffect(phase.isIdentity ? 1 : 0.9)
-                        })
-                        .containerRelativeFrame(.horizontal, alignment: .center)
-                        .id(item)
+                            .scrollTransition(.interactive.threshold(.visible(0.95)), transition: { content, phase in
+                                content
+                                    .scaleEffect(phase.isIdentity ? 1 : 0.9)
+                            })
+                            .containerRelativeFrame(.horizontal, alignment: .center)
+                            .id(item)
                     }
                 }
             }
@@ -67,5 +67,5 @@ struct CarouselView<Model: Hashable, Content: View>: View {
             imageName: model.profileImageName
         )
     })
-        .padding()
+    .padding()
 }

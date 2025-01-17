@@ -10,6 +10,7 @@ import SwiftUI
 struct WelcomeView: View {
 
     @State var imageName = Constants.randomImage
+    @State private var showSingInPressed = false
 
     var body: some View {
         NavigationStack {
@@ -22,6 +23,13 @@ struct WelcomeView: View {
 
                 buttons
                     .padding(16)
+            }
+            .sheet(isPresented: $showSingInPressed) {
+                CreateAccountView(
+                    title: "Sign in",
+                    subtitle: "Connect to an existing account."
+                )
+                    .presentationDetents([.medium])
             }
         }
     }
@@ -49,8 +57,8 @@ struct WelcomeView: View {
                 .tappableBackground()
                 .underline()
                 .foregroundStyle(.black)
-                .onTapGesture {
-
+                .anyButton {
+                    onSingInPressed()
                 }
 
             HStack {
@@ -65,6 +73,10 @@ struct WelcomeView: View {
             }
             .foregroundStyle(.accent)
         }
+    }
+
+    private func onSingInPressed() {
+        showSingInPressed = true
     }
 }
 

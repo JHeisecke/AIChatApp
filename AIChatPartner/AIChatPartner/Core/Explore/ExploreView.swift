@@ -44,7 +44,7 @@ struct ExploreView: View {
                             imageName: avatar.profileImageName
                         )
                     }
-                    .anyButton {
+                    .anyButton(.press) {
 
                     }
                 }

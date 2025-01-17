@@ -39,4 +39,16 @@ extension View {
                 ], startPoint: .top, endPoint: .bottom)
             )
     }
+
+    func badgeLabel() -> some View {
+        self
+            .font(.caption)
+            .bold()
+            .foregroundStyle(.white)
+            .padding(.vertical, 8)
+            .padding(.horizontal, 6)
+            .background(.blue)
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+
+    }
 }
