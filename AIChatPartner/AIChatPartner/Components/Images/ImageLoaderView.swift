@@ -12,6 +12,7 @@ struct ImageLoaderView: View {
 
     var urlString: String
     var resizingMode = ContentMode.fill
+    var forceTransitionAnimation = false
 
     var body: some View {
         Rectangle()
@@ -24,6 +25,10 @@ struct ImageLoaderView: View {
                     .allowsHitTesting(false)
             }
             .clipped()
+            .if(forceTransitionAnimation, transform: { view in
+                view
+                    .drawingGroup()
+            })
     }
 }
 

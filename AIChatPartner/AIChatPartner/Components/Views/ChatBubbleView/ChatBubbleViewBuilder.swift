@@ -12,14 +12,16 @@ struct ChatBubbleViewBuilder: View {
     var message: ChatMessageModel = .mock
     var isCurrentUser: Bool = false
     var imageName: String?
-    
+    var onImagePressed: (() -> Void)?
+
     var body: some View {
         ChatBubbleView(
             text: message.content ?? "",
             textColor: isCurrentUser ? .white : .primary,
             backgroundColor: isCurrentUser ? .accent : Color(uiColor: .systemGray6),
             showImage: !isCurrentUser,
-            imageName: imageName
+            imageName: imageName,
+            onImagePressed: onImagePressed
         )
         .frame(maxWidth: .infinity, alignment: isCurrentUser ? .trailing : .leading)
         .padding(.leading, isCurrentUser ? 75 : 0)
