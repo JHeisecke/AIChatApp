@@ -9,18 +9,23 @@ import SwiftUI
 
 struct ProfileView: View {
 
+    // MARK: - Properties
+
     @State private var showSettingsView: Bool = false
     @State private var showCreateAvatarView: Bool = false
     @State private var currentUser: UserModel? = UserModel.mock
     @State private var myAvatars: [AvatarModel]?
     @State private var isLoading = false
+    @State private var path: [NavigationPathOption] = []
+
+    // MARK: - Body
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List {
                 myInfoSection
                     .removeListRowFormatting()
-                myAvatarSection
+                myAvatarsSection
                     .removeListRowFormatting()
             }
             .navigationTitle("Profile")
@@ -29,6 +34,7 @@ struct ProfileView: View {
                     settingsButton
                 }
             }
+            .navigationDestionationForCoreModule(path: $path)
         }
         .sheet(isPresented: $showSettingsView) {
             SettingsView()
@@ -51,7 +57,9 @@ struct ProfileView: View {
             }
     }
 
-    private var myAvatarSection: some View {
+    // MARK: - My Avatars Section
+
+    private var myAvatarsSection: some View {
         Section {
             if let myAvatars, !myAvatars.isEmpty {
                 ForEach(myAvatars, id: \.self) { avatar in
@@ -61,7 +69,7 @@ struct ProfileView: View {
                         subtitle: nil
                     )
                     .anyButton(.highlight) {
-
+                        onAvatarPressed(avatar: avatar)
                     }
                 }
                 .onDelete { indexSet in
@@ -94,6 +102,8 @@ struct ProfileView: View {
         }
     }
 
+    // MARK: - My Info Section
+
     private var myInfoSection: some View {
         Section {
             ZStack {
@@ -111,6 +121,8 @@ struct ProfileView: View {
         myAvatars = AvatarModel.mocks
     }
 
+    // MARK: - Actions
+
     private func onDeleteAvatar(indexSet: IndexSet) {
         guard let index = indexSet.first else { return }
         myAvatars?.remove(at: index)
@@ -122,6 +134,10 @@ struct ProfileView: View {
 
     private func onNewAvatarButtonPressed() {
         showCreateAvatarView = true
+    }
+
+    private func onAvatarPressed(avatar: AvatarModel) {
+        path.append(.chat(avatarId: avatar.avatarId))
     }
 }
 

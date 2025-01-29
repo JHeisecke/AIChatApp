@@ -9,12 +9,18 @@ import SwiftUI
 
 struct ExploreView: View {
 
+    // MARK: - Properties
+
     @State private var featureAvatars: [AvatarModel] = AvatarModel.mocks
     @State private var categories: [CharacterOption] = CharacterOption.allCases
     @State private var popularAvatars: [AvatarModel] = AvatarModel.mocks
 
+    @State private var path: [NavigationPathOption] = []
+
+    // MARK: - Body
+
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List {
                 Group {
                     featuredSection
@@ -26,6 +32,7 @@ struct ExploreView: View {
             .navigationTitle(
                 "Explore"
             )
+            .navigationDestionationForCoreModule(path: $path)
         }
     }
 
@@ -43,9 +50,9 @@ struct ExploreView: View {
                             subtitle: avatar.characterDescription,
                             imageName: avatar.profileImageName
                         )
-                    }
-                    .anyButton(.press) {
-
+                        .anyButton {
+                            onAvatarPressed(avatar: avatar)
+                        }
                     }
                 }
             },
@@ -58,30 +65,36 @@ struct ExploreView: View {
     // MARK: - Categories Section
 
     private var categoriesSection: some View {
-        Section(
-            content: {
-                ZStack {
-                    ScrollView(.horizontal) {
-                        HStack(spacing: 12) {
-                            ForEach(categories, id: \.self) { category in
-                                CategoryCellView(
-                                    title: category.plural.capitalized,
-                                    imageName: Constants.randomImage
-                                )
-                            }
-                        }
-                    }
-                    .frame(height: 140)
-                    .scrollIndicators(.hidden)
-                    .scrollTargetLayout()
-                    .scrollTargetBehavior(.viewAligned)
-
+        Section {
+            ZStack {
+                ScrollView(.horizontal) {
+                    categoriesContent
                 }
-            },
-            header: {
-
+                .frame(height: 140)
+                .scrollIndicators(.hidden)
+                .scrollTargetLayout()
+                .scrollTargetBehavior(.viewAligned)
             }
-        )
+        } header: {
+
+        }
+    }
+
+    private var categoriesContent: some View {
+        HStack(spacing: 12) {
+            ForEach(categories, id: \.self) { category in
+                let imageName = popularAvatars.first(where: { $0.characterOption == category })?.profileImageName
+                if let imageName {
+                    CategoryCellView(
+                        title: category.plural.capitalized,
+                        imageName: imageName
+                    )
+                    .anyButton {
+                        onCategoryPressed(category: category, imageName: imageName)
+                    }
+                }
+            }
+        }
     }
 
     // MARK: - Popular Section
@@ -96,7 +109,7 @@ struct ExploreView: View {
                         subtitle: avatar.characterDescription
                     )
                     .anyButton(.highlight) {
-
+                        onAvatarPressed(avatar: avatar)
                     }
                 }
             },
@@ -104,6 +117,16 @@ struct ExploreView: View {
 
             }
         )
+    }
+
+    // MARK: - Actions
+
+    private func onAvatarPressed(avatar: AvatarModel) {
+        path.append(.chat(avatarId: avatar.avatarId))
+    }
+
+    private func onCategoryPressed(category: CharacterOption, imageName: String) {
+        path.append(.category(category: category, imageName: imageName))
     }
 }
 

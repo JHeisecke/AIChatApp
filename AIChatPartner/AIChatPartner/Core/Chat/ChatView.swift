@@ -19,6 +19,8 @@ struct ChatView: View {
     @State private var showChatSettings: AnyAppAlert?
     @State private var showProfileModal: Bool = false
 
+    var avatarId: String
+
     var body: some View {
         VStack(spacing: 0) {
             scrollViewSection
@@ -165,6 +167,6 @@ struct ChatView: View {
 
 #Preview {
     NavigationStack {
-        ChatView()
+        ChatView(avatarId: "")
     }
 }
