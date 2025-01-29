@@ -19,7 +19,7 @@ struct CategoryCellView: View {
             ImageLoaderView(urlString: imageName)
                 .aspectRatio(1, contentMode: .fit)
                 .overlay(alignment: .bottomLeading, content: {
-                    Text(title)
+                    Text(title.capitalized)
                         .font(font)
                         .fontWeight(.semibold)
                         .padding(16)
