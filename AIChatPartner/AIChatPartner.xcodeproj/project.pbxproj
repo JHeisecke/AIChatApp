@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00413FE62D4E68CD00C8D4B5 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 00413FE52D4E68CD00C8D4B5 /* FirebaseAuth */; };
 		007B4A4B2D39E9890069AA59 /* SwiftfulUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = 007B4A4A2D39E9890069AA59 /* SwiftfulUtilities */; };
 		00998C4F2D32D30100B49DF8 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 00998C4E2D32D30100B49DF8 /* SDWebImageSwiftUI */; };
 /* End PBXBuildFile section */
@@ -58,6 +59,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00998C4F2D32D30100B49DF8 /* SDWebImageSwiftUI in Frameworks */,
+				00413FE62D4E68CD00C8D4B5 /* FirebaseAuth in Frameworks */,
 				007B4A4B2D39E9890069AA59 /* SwiftfulUtilities in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -122,6 +124,7 @@
 			packageProductDependencies = (
 				00998C4E2D32D30100B49DF8 /* SDWebImageSwiftUI */,
 				007B4A4A2D39E9890069AA59 /* SwiftfulUtilities */,
+				00413FE52D4E68CD00C8D4B5 /* FirebaseAuth */,
 			);
 			productName = AIChatPartner;
 			productReference = 0089D4422D3080690056B465 /* AIChatPartner.app */;
@@ -209,6 +212,7 @@
 				0089D4762D3084890056B465 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
 				00998C4D2D32D30100B49DF8 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				007B4A492D39E9890069AA59 /* XCRemoteSwiftPackageReference "SwiftfulUtilities" */,
+				00413FE42D4E68CD00C8D4B5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0089D4432D3080690056B465 /* Products */;
@@ -615,6 +619,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		00413FE42D4E68CD00C8D4B5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.7.0;
+			};
+		};
 		007B4A492D39E9890069AA59 /* XCRemoteSwiftPackageReference "SwiftfulUtilities" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftfulThinking/SwiftfulUtilities.git";
@@ -642,6 +654,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		00413FE52D4E68CD00C8D4B5 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00413FE42D4E68CD00C8D4B5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
 		007B4A4A2D39E9890069AA59 /* SwiftfulUtilities */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 007B4A492D39E9890069AA59 /* XCRemoteSwiftPackageReference "SwiftfulUtilities" */;

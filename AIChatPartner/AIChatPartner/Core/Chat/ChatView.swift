@@ -84,7 +84,6 @@ struct ChatView: View {
                     .anyButton(.plain, action: {
                         onSendMessagePressed()
                     })
-
                 , alignment: .trailing
             )
             .background(
