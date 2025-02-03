@@ -9,7 +9,15 @@ import SwiftUI
 import FirebaseAuth
 import SignInAppleAsync
 
-struct FirebaseAuthService {
+protocol AuthService: Sendable {
+    func getAuthenticatedUser() -> UserAuthInfo?
+    func signInAnonymously() async throws -> (user: UserAuthInfo, isNewUser: Bool)
+    func signInApple() async throws -> (user: UserAuthInfo, isNewUser: Bool)
+    func signOut() throws
+    func deleteAccount() async throws
+}
+
+struct FirebaseAuthService: AuthService {
 
     func getAuthenticatedUser() -> UserAuthInfo? {
         if let user = Auth.auth().currentUser {
@@ -77,5 +85,5 @@ extension AuthDataResult {
 }
 
 extension EnvironmentValues {
-    @Entry var authService: FirebaseAuthService = FirebaseAuthService()
+    @Entry var authService: AuthService = FirebaseAuthService()
 }
