@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		003944342D636EC100867CD1 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 003944332D636EC100867CD1 /* FirebaseFirestore */; };
 		00413FE62D4E68CD00C8D4B5 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 00413FE52D4E68CD00C8D4B5 /* FirebaseAuth */; };
 		00413FF32D4E82A900C8D4B5 /* SignInAppleAsync in Frameworks */ = {isa = PBXBuildFile; productRef = 00413FF22D4E82A900C8D4B5 /* SignInAppleAsync */; };
 		007B4A4B2D39E9890069AA59 /* SwiftfulUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = 007B4A4A2D39E9890069AA59 /* SwiftfulUtilities */; };
@@ -62,6 +63,7 @@
 				00413FF32D4E82A900C8D4B5 /* SignInAppleAsync in Frameworks */,
 				00998C4F2D32D30100B49DF8 /* SDWebImageSwiftUI in Frameworks */,
 				00413FE62D4E68CD00C8D4B5 /* FirebaseAuth in Frameworks */,
+				003944342D636EC100867CD1 /* FirebaseFirestore in Frameworks */,
 				007B4A4B2D39E9890069AA59 /* SwiftfulUtilities in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -83,12 +85,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		003944322D636EC100867CD1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		0089D4392D3080690056B465 = {
 			isa = PBXGroup;
 			children = (
 				0089D4442D3080690056B465 /* AIChatPartner */,
 				0089D4552D30806B0056B465 /* AIChatPartnerTests */,
 				0089D45F2D30806B0056B465 /* AIChatPartnerUITests */,
+				003944322D636EC100867CD1 /* Frameworks */,
 				0089D4432D3080690056B465 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -128,6 +138,7 @@
 				007B4A4A2D39E9890069AA59 /* SwiftfulUtilities */,
 				00413FE52D4E68CD00C8D4B5 /* FirebaseAuth */,
 				00413FF22D4E82A900C8D4B5 /* SignInAppleAsync */,
+				003944332D636EC100867CD1 /* FirebaseFirestore */,
 			);
 			productName = AIChatPartner;
 			productReference = 0089D4422D3080690056B465 /* AIChatPartner.app */;
@@ -666,6 +677,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		003944332D636EC100867CD1 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00413FE42D4E68CD00C8D4B5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
 		00413FE52D4E68CD00C8D4B5 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 00413FE42D4E68CD00C8D4B5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
