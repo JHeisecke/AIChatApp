@@ -1,5 +1,5 @@
 //
-//  MockAuthService.swift
+//  MockauthManager.swift
 //  AIChatPartner
 //
 //  Created by Javier Heisecke on 2025-02-03.
@@ -13,6 +13,12 @@ struct MockAuthService: AuthService {
 
     init(user: UserAuthInfo? = nil) {
         self.currentUser = user
+    }
+
+    func addAuthenticatedUserListener(onListenerAttached: (any NSObjectProtocol) -> Void) -> AsyncStream<UserAuthInfo?> {
+        AsyncStream { continuation in
+            continuation.yield(currentUser)
+        }
     }
 
     func getAuthenticatedUser() -> UserAuthInfo? {

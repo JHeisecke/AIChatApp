@@ -1,5 +1,5 @@
 //
-//  FirebaseAuthService.swift
+//  FirebaseauthManager.swift
 //  AIChatPartner
 //
 //  Created by Javier Heisecke on 2025-02-01.
@@ -15,9 +15,24 @@ protocol AuthService: Sendable {
     func signInApple() async throws -> (user: UserAuthInfo, isNewUser: Bool)
     func signOut() throws
     func deleteAccount() async throws
+    func addAuthenticatedUserListener(onListenerAttached: (any NSObjectProtocol) -> Void) -> AsyncStream<UserAuthInfo?>
 }
 
 struct FirebaseAuthService: AuthService {
+
+    func addAuthenticatedUserListener(onListenerAttached: (any NSObjectProtocol) -> Void) -> AsyncStream<UserAuthInfo?> {
+        AsyncStream { continuation in
+            let listener = Auth.auth().addStateDidChangeListener { _, currentUser in
+                if let currentUser {
+                    let user = UserAuthInfo(user: currentUser)
+                    continuation.yield(user)
+                } else {
+                    continuation.yield(nil)
+                }
+            }
+            onListenerAttached(listener)
+        }
+    }
 
     func getAuthenticatedUser() -> UserAuthInfo? {
         if let user = Auth.auth().currentUser {
@@ -82,8 +97,4 @@ extension AuthDataResult {
         let isNewUser = self.additionalUserInfo?.isNewUser ?? true
         return (user, isNewUser)
     }
-}
-
-extension EnvironmentValues {
-    @Entry var authService: AuthService = FirebaseAuthService()
 }

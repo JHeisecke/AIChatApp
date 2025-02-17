@@ -9,11 +9,14 @@ import Foundation
 
 enum AuthError: LocalizedError {
     case userNotFound
+    case notSignedIn
 
     var errorDescription: String? {
         switch self {
         case .userNotFound:
             "Current authenticated user not found."
+        case .notSignedIn:
+            "You're not signed in."
         }
     }
 }
