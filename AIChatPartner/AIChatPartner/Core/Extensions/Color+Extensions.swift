@@ -35,7 +35,7 @@ extension Color {
 }
 
 extension Color {
-    // Convert Color to hex string
+
     var hexString: String {
         let components = UIColor(self).cgColor.components
         let red: CGFloat = components?[0] ?? 0.0
