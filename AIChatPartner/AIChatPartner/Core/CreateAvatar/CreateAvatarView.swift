@@ -9,7 +9,10 @@ import SwiftUI
 
 struct CreateAvatarView: View {
 
+    // MARK: - Properties
+
     @Environment(\.dismiss) private var dismiss
+    @Environment(AIManager.self) private var aiManager
 
     @State private var avatarName: String = ""
     @State private var characterOption: CharacterOption = .default
@@ -137,6 +140,8 @@ struct CreateAvatarView: View {
         }
     }
 
+    // MARK: - Actions
+
     private func onBackButtonPressed() {
         dismiss()
     }
@@ -145,9 +150,17 @@ struct CreateAvatarView: View {
         isGenerating = true
 
         Task {
-            try? await Task.sleep(for: .seconds(3))
-            generatedImage = UIImage(systemName: "star.fill")
+            do {
+                let input = AvatarDescriptionBuilder(
+                    characterOption: characterOption,
+                    characterAction: characterAction,
+                    characterLocation: characterLocation
+                ).characterDescription
+                generatedImage = try await aiManager.generateImage(input: input)
 
+            } catch {
+                print("Erro generating image: \(error)")
+            }
             isGenerating = false
         }
     }
@@ -166,4 +179,5 @@ struct CreateAvatarView: View {
 
 #Preview {
     CreateAvatarView()
+        .environment(AIManager(service: MockAIService()))
 }
