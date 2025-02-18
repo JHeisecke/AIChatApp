@@ -10,4 +10,5 @@ struct Constants {
     static let randomImage = "https://picsum.photos/600/600"
     static let termsOfServiceURL = "https://picsum.photos/600/600"
     static let privacyPolicyURL = "https://picsum.photos/600/600"
+    static let userModelKey = "userModel"
 }

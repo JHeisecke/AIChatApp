@@ -8,14 +8,7 @@
 import SwiftUI
 import FirebaseFirestore
 
-protocol UserService: Sendable {
-    func saveUser(user: UserModel) async throws
-    func deleteUser(userId: String) async throws
-    func markOnboardingAsCompleted(userId: String, profileColorHex: String) async throws
-    func streamUser(userId: String) -> AsyncThrowingStream<UserModel, Error>
-}
-
-struct FirebaseUserService: UserService {
+struct FirebaseUserService: RemoteUserService {
     var collection: CollectionReference {
         Firestore.firestore().collection("users")
     }
