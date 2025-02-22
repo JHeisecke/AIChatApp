@@ -18,8 +18,10 @@ struct ChatsView: View {
 
     // MARK: - Properties
 
+    @Environment(AvatarManager.self) private var avatarManager
+
     @State private var chatsState: ChatsState = .data(chats: ChatModel.mocks)
-    @State private var recentAvatars: [AvatarModel] = AvatarModel.mocks
+    @State private var recentAvatars: [AvatarModel] = []
     @State private var path: [NavigationPathOption] = []
 
     var body: some View {
@@ -40,6 +42,9 @@ struct ChatsView: View {
             }
             .navigationTitle("Chats")
             .navigationDestionationForCoreModule(path: $path)
+            .onAppear {
+                loadRecentAvatars()
+            }
         }
     }
 
@@ -107,6 +112,16 @@ struct ChatsView: View {
         }
     }
 
+    // MARK: - Data
+
+    private func loadRecentAvatars() {
+        do {
+            recentAvatars = try avatarManager.getRecentAvatar()
+        } catch {
+            print("Error getting recent avatars. \(error)")
+        }
+    }
+
     // MARK: - Actions
 
     private func onChatPressed(chat: ChatModel) {
@@ -120,4 +135,5 @@ struct ChatsView: View {
 
 #Preview {
     ChatsView()
+        .environment(AvatarManager(service: MockAvatarService()))
 }

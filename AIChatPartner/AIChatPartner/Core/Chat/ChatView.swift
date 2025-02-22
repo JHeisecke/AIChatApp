@@ -9,8 +9,12 @@ import SwiftUI
 
 struct ChatView: View {
 
+    // MARK: - Properties
+
+    @Environment(AvatarManager.self) private var avatarManager
+
     @State private var chatMessages: [ChatMessageModel] = ChatMessageModel.mocks
-    @State private var avatar: AvatarModel? = .mock
+    @State private var avatar: AvatarModel?
     @State private var currentUser: UserModel? = .mock
     @State private var textFieldText: String = ""
     @State private var scrollPosition: String?
@@ -44,7 +48,12 @@ struct ChatView: View {
                 profileModal(avatar: avatar)
             }
         }
+        .task {
+            await loadAvatar()
+        }
     }
+
+    // MARK: Scroll Section
 
     private var scrollViewSection: some View {
         ScrollView {
@@ -69,6 +78,8 @@ struct ChatView: View {
         .animation(.default, value: chatMessages.count)
         .animation(.default, value: scrollPosition)
     }
+
+    // MARK: TextField
 
     private var textFieldSection: some View {
         TextField("Say something...", text: $textFieldText)
@@ -100,6 +111,8 @@ struct ChatView: View {
             .background(Color(uiColor: .secondarySystemBackground))
     }
 
+    // MARK: Modal
+
     private func profileModal(avatar: AvatarModel) -> some View {
         ProfileModalView(
             imageName: avatar.profileImageName,
@@ -113,6 +126,21 @@ struct ChatView: View {
         .padding(40)
         .transition(.slide)
     }
+
+    // MARK: - Data
+
+    private func loadAvatar() async {
+        do {
+            let avatar = try await avatarManager.getAvatar(id: avatarId)
+            self.avatar = avatar
+
+            try avatarManager.addRecentAvatar(avatar: avatar)
+        } catch {
+            print("Error loading avatar: \(error)")
+        }
+    }
+
+    // MARK: - Actions
 
     private func onSendMessagePressed() {
         guard let currentUser else { return }
@@ -164,8 +192,11 @@ struct ChatView: View {
     }
 }
 
+// MARK: - Preview
+
 #Preview {
     NavigationStack {
         ChatView(avatarId: "")
+            .environment(AvatarManager(service: MockAvatarService()))
     }
 }
