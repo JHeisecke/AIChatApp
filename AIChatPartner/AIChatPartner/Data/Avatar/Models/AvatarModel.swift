@@ -18,6 +18,7 @@ struct AvatarModel: Hashable, Codable {
     let characterLocation: CharacterLocation?
     let authorId: String?
     let dateCreated: Date?
+    let clickCount: Int?
 
     init(
         avatarId: String,
@@ -27,7 +28,8 @@ struct AvatarModel: Hashable, Codable {
         characterAction: CharacterAction? = nil,
         characterLocation: CharacterLocation? = nil,
         authorId: String? = nil,
-        dateCreated: Date? = nil
+        dateCreated: Date? = nil,
+        clickCount: Int? = 0
     ) {
         self.avatarId = avatarId
         self.name = name
@@ -37,6 +39,7 @@ struct AvatarModel: Hashable, Codable {
         self.characterLocation = characterLocation
         self.authorId = authorId
         self.dateCreated = dateCreated
+        self.clickCount = clickCount
     }
 
     enum CodingKeys: String, CodingKey {
@@ -48,6 +51,7 @@ struct AvatarModel: Hashable, Codable {
         case characterLocation = "character_location"
         case authorId = "author_id"
         case dateCreated = "date_created"
+        case clickCount = "click_count"
     }
 
     var characterDescription: String {
@@ -72,7 +76,8 @@ extension AvatarModel {
                 characterAction: .crying,
                 characterLocation: .city,
                 authorId: UUID().uuidString,
-                dateCreated: .now
+                dateCreated: .now,
+                clickCount: 10
             ),
             AvatarModel(
                 avatarId: UUID().uuidString,
@@ -82,7 +87,8 @@ extension AvatarModel {
                 characterAction: .smiling,
                 characterLocation: .forest,
                 authorId: UUID().uuidString,
-                dateCreated: .now
+                dateCreated: .now,
+                clickCount: 100
             ),
             AvatarModel(
                 avatarId: UUID().uuidString,
@@ -92,7 +98,8 @@ extension AvatarModel {
                 characterAction: .sitting,
                 characterLocation: .space,
                 authorId: UUID().uuidString,
-                dateCreated: .now
+                dateCreated: .now,
+                clickCount: 9
             ),
             AvatarModel(
                 avatarId: UUID().uuidString,
@@ -102,7 +109,8 @@ extension AvatarModel {
                 characterAction: .drinking,
                 characterLocation: .mall,
                 authorId: UUID().uuidString,
-                dateCreated: .now
+                dateCreated: .now,
+                clickCount: 7
             )
         ]
     }
@@ -116,7 +124,8 @@ extension AvatarModel {
             characterAction: .crying,
             characterLocation: .city,
             authorId: UUID().uuidString,
-            dateCreated: .now
+            dateCreated: .now,
+            clickCount: 1
         )
     }
 }

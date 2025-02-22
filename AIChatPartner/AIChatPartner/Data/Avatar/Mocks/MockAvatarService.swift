@@ -36,4 +36,8 @@ struct MockAvatarService: RemoteAvatarService {
         try await Task.sleep(for: .seconds(1))
         return AvatarModel.mock
     }
+
+    func incrementAvatarClickCount(avatarId: String) async throws {
+        
+    }
 }
