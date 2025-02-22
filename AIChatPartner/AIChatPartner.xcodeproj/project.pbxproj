@@ -11,6 +11,7 @@
 		0039497E2D65253400867CD1 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 0039497D2D65253400867CD1 /* OpenAI */; };
 		00413FE62D4E68CD00C8D4B5 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 00413FE52D4E68CD00C8D4B5 /* FirebaseAuth */; };
 		00413FF32D4E82A900C8D4B5 /* SignInAppleAsync in Frameworks */ = {isa = PBXBuildFile; productRef = 00413FF22D4E82A900C8D4B5 /* SignInAppleAsync */; };
+		00765CF52D668AAD009E6729 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 00765CF42D668AAD009E6729 /* FirebaseStorage */; };
 		007B4A4B2D39E9890069AA59 /* SwiftfulUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = 007B4A4A2D39E9890069AA59 /* SwiftfulUtilities */; };
 		00998C4F2D32D30100B49DF8 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 00998C4E2D32D30100B49DF8 /* SDWebImageSwiftUI */; };
 /* End PBXBuildFile section */
@@ -65,6 +66,7 @@
 				00998C4F2D32D30100B49DF8 /* SDWebImageSwiftUI in Frameworks */,
 				00413FE62D4E68CD00C8D4B5 /* FirebaseAuth in Frameworks */,
 				003944342D636EC100867CD1 /* FirebaseFirestore in Frameworks */,
+				00765CF52D668AAD009E6729 /* FirebaseStorage in Frameworks */,
 				0039497E2D65253400867CD1 /* OpenAI in Frameworks */,
 				007B4A4B2D39E9890069AA59 /* SwiftfulUtilities in Frameworks */,
 			);
@@ -142,6 +144,7 @@
 				00413FF22D4E82A900C8D4B5 /* SignInAppleAsync */,
 				003944332D636EC100867CD1 /* FirebaseFirestore */,
 				0039497D2D65253400867CD1 /* OpenAI */,
+				00765CF42D668AAD009E6729 /* FirebaseStorage */,
 			);
 			productName = AIChatPartner;
 			productReference = 0089D4422D3080690056B465 /* AIChatPartner.app */;
@@ -708,6 +711,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 00413FF12D4E82A900C8D4B5 /* XCRemoteSwiftPackageReference "SignInAppleAsync" */;
 			productName = SignInAppleAsync;
+		};
+		00765CF42D668AAD009E6729 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 00413FE42D4E68CD00C8D4B5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 		007B4A4A2D39E9890069AA59 /* SwiftfulUtilities */ = {
 			isa = XCSwiftPackageProductDependency;

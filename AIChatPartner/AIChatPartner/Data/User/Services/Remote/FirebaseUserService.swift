@@ -14,7 +14,11 @@ struct FirebaseUserService: RemoteUserService {
     }
 
     func saveUser(user: UserModel) async throws {
-        try collection.document(user.userId).setData(from: user, merge: true)
+        do {
+            try collection.document(user.userId).setData(from: user, merge: true)
+        } catch {
+            print("error on save User data")
+        }
     }
 
     func markOnboardingAsCompleted(userId: String, profileColorHex: String) async throws {
