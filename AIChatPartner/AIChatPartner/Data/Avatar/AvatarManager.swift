@@ -19,4 +19,20 @@ class AvatarManager {
     func createAvatar(avatar: AvatarModel, image: UIImage) async throws {
         try await service.createAvatar(avatar: avatar, image: image)
     }
+
+    func getFeaturedAvatars() async throws -> [AvatarModel] {
+        try await service.getFeaturedAvatars()
+    }
+
+    func getPopularAvatars() async throws -> [AvatarModel] {
+        try await service.getPopularAvatars()
+    }
+
+    func getAvatars(by category: CharacterOption) async throws -> [AvatarModel] {
+        try await service.getAvatars(by: category)
+    }
+
+    func getAvatars(byAuthor id: String) async throws -> [AvatarModel] {
+        try await service.getAvatars(by: id)
+    }
 }

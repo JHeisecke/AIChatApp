@@ -11,7 +11,7 @@ import FirebaseFirestore
 struct FirebaseAvatarService: AvatarService {
 
     var collection: CollectionReference {
-        Firestore.firestore().collection("users")
+        Firestore.firestore().collection("avatars")
     }
 
     func createAvatar(avatar: AvatarModel, image: UIImage) async throws {
@@ -23,5 +23,32 @@ struct FirebaseAvatarService: AvatarService {
         avatar.updateProfileImage(imageName: url.absoluteString)
 
         try collection.document(avatar.avatarId).setData(from: avatar, merge: true)
+    }
+
+    func getFeaturedAvatars() async throws -> [AvatarModel] {
+        try await collection
+            .limit(to: 50)
+            .getDocuments(as: AvatarModel.self)
+            .shuffled()
+            .first(upTo: 5) ?? []
+    }
+
+    func getPopularAvatars() async throws -> [AvatarModel] {
+        try await collection
+            .limit(to: 200)
+            .getDocuments(as: AvatarModel.self)
+    }
+
+    func getAvatars(by category: CharacterOption) async throws -> [AvatarModel] {
+        try await collection
+            .whereField(AvatarModel.CodingKeys.characterOption.rawValue, isEqualTo: category.rawValue)
+            .limit(to: 200)
+            .getDocuments(as: AvatarModel.self)
+    }
+
+    func getAvatars(by author: String) async throws -> [AvatarModel] {
+        try await collection
+            .whereField(AvatarModel.CodingKeys.authorId.rawValue, isEqualTo: author)
+            .getDocuments(as: AvatarModel.self)
     }
 }

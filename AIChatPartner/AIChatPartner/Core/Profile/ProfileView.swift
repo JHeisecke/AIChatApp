@@ -11,6 +11,8 @@ struct ProfileView: View {
 
     // MARK: - Properties
     @Environment(UserManager.self) private var userManager
+    @Environment(AuthManager.self) private var authManager
+    @Environment(AvatarManager.self) private var avatarManager
 
     @State private var showSettingsView: Bool = false
     @State private var showCreateAvatarView: Bool = false
@@ -116,10 +118,18 @@ struct ProfileView: View {
         }
     }
 
+    // MARK: - Data
+
     private func loadData() async {
         currentUser = userManager.currentUser
+
+        do {
+            let uid = try authManager.getAuthId()
+            myAvatars = try await avatarManager.getAvatars(byAuthor: uid)
+        } catch {
+            print("Error getting avatars of profile. \(error)")
+        }
         isLoading = false
-        myAvatars = AvatarModel.mocks
     }
 
     // MARK: - Actions
@@ -147,5 +157,7 @@ struct ProfileView: View {
         ProfileView()
     }
     .environment(AppState())
+    .environment(AuthManager(service: MockAuthService(user: nil)))
     .environment(UserManager(service: MockUserServices(user: .mock)))
+    .environment(AvatarManager(service: MockAvatarService()))
 }

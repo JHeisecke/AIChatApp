@@ -11,9 +11,11 @@ struct ExploreView: View {
 
     // MARK: - Properties
 
-    @State private var featureAvatars: [AvatarModel] = AvatarModel.mocks
+    @Environment(AvatarManager.self) private var avatarManager
+
+    @State private var featuredAvatars: [AvatarModel] = []
     @State private var categories: [CharacterOption] = CharacterOption.allCases
-    @State private var popularAvatars: [AvatarModel] = AvatarModel.mocks
+    @State private var popularAvatars: [AvatarModel] = []
 
     @State private var path: [NavigationPathOption] = []
 
@@ -23,9 +25,19 @@ struct ExploreView: View {
         NavigationStack(path: $path) {
             List {
                 Group {
-                    featuredSection
-                    categoriesSection
-                    popularSection
+                    if featuredAvatars.isEmpty && popularAvatars.isEmpty {
+                        ProgressView()
+                            .padding(40)
+                            .frame(maxWidth: .infinity)
+                    }
+                    if !featuredAvatars.isEmpty {
+                        featuredSection
+                    }
+                    if !popularAvatars.isEmpty {
+                        categoriesSection
+                        popularSection
+                    }
+
                 }
                 .removeListRowFormatting()
             }
@@ -33,6 +45,12 @@ struct ExploreView: View {
                 "Explore"
             )
             .navigationDestionationForCoreModule(path: $path)
+            .task {
+                await loadFeaturedAvatars()
+            }
+            .task {
+                await loadPopularAvatars()
+            }
         }
     }
 
@@ -43,7 +61,7 @@ struct ExploreView: View {
             content: {
                 ZStack {
                     CarouselView(
-                        items: featureAvatars
+                        items: featuredAvatars
                     ) { avatar in
                         HeroCellView(
                             title: avatar.name,
@@ -57,7 +75,7 @@ struct ExploreView: View {
                 }
             },
             header: {
-
+                Text("FEATURED")
             }
         )
     }
@@ -76,7 +94,7 @@ struct ExploreView: View {
                 .scrollTargetBehavior(.viewAligned)
             }
         } header: {
-
+            Text("CATEGORIES")
         }
     }
 
@@ -114,9 +132,29 @@ struct ExploreView: View {
                 }
             },
             header: {
-
+                Text("POPULAR")
             }
         )
+    }
+
+    // MARK: - Data
+
+    private func loadFeaturedAvatars() async {
+        guard featuredAvatars.isEmpty else { return }
+        do {
+            featuredAvatars = try await avatarManager.getFeaturedAvatars()
+        } catch {
+            print("Erro loading featured avatars: \(error)")
+        }
+    }
+
+    private func loadPopularAvatars() async {
+        guard popularAvatars.isEmpty else { return }
+        do {
+            popularAvatars = try await avatarManager.getPopularAvatars()
+        } catch {
+            print("Erro loading popular avatars: \(error)")
+        }
     }
 
     // MARK: - Actions
@@ -133,5 +171,6 @@ struct ExploreView: View {
 #Preview {
     NavigationStack {
         ExploreView()
+            .environment(AvatarManager(service: MockAvatarService()))
     }
 }

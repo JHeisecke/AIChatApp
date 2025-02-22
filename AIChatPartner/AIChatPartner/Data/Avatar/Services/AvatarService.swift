@@ -9,4 +9,8 @@ import SwiftUI
 
 protocol AvatarService: Sendable {
     func createAvatar(avatar: AvatarModel, image: UIImage) async throws
+    func getFeaturedAvatars() async throws -> [AvatarModel]
+    func getPopularAvatars() async throws -> [AvatarModel]
+    func getAvatars(by category: CharacterOption) async throws -> [AvatarModel]
+    func getAvatars(by author: String) async throws -> [AvatarModel]
 }
