@@ -163,7 +163,7 @@ struct CreateAvatarView: View {
                 generatedImage = try await aiManager.generateImage(input: input)
 
             } catch {
-                print("Erro generating image: \(error)")
+                print("Error generating image: \(error)")
             }
             isGenerating = false
         }

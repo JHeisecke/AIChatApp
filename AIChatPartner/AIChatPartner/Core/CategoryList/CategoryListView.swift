@@ -28,12 +28,12 @@ struct CategoryListView: View {
                 cornerRadius: 0
             )
             .removeListRowFormatting()
-            if avatars.isEmpty && isLoading {
-                ProgressView()
-                    .padding(40)
-                    .frame(maxWidth: .infinity)
-                    .listRowSeparator(.hidden)
-                    .removeListRowFormatting()
+            if avatars.isEmpty {
+                if isLoading {
+                    loadingIndicator
+                } else {
+                    emptyView
+                }
             } else {
                 ForEach(avatars, id: \.avatarId) { avatar in
                     avatarCell(avatar)
@@ -48,6 +48,26 @@ struct CategoryListView: View {
         }
     }
 
+    private var loadingIndicator: some View {
+        ProgressView()
+            .padding(40)
+            .frame(maxWidth: .infinity)
+            .listRowSeparator(.hidden)
+            .removeListRowFormatting()
+    }
+
+    private var emptyView: some View {
+        Text("No avatars for this category")
+            .font(.subheadline)
+            .foregroundStyle(.secondary)
+            .removeListRowFormatting()
+            .listRowSeparator(.hidden)
+            .padding(30)
+            .frame(maxWidth: .infinity)
+    }
+
+    // MARK: - Cell
+
     private func avatarCell(_ avatar: AvatarModel) -> some View {
         CustomListCellView(
             imageName: avatar.profileImageName,
@@ -60,12 +80,15 @@ struct CategoryListView: View {
         .removeListRowFormatting()
     }
 
+    // MARK: - Data
+
     private func loadAvatars() async {
         do {
             avatars = try await avatarManager.getAvatars(by: category)
         } catch {
             showAlert = AnyAppAlert(error: error)
         }
+        isLoading = false
     }
 
     // MARK: - Actions
@@ -75,7 +98,22 @@ struct CategoryListView: View {
     }
 }
 
-#Preview {
+#Preview("Has Data") {
     CategoryListView(path: .constant([]), category: .alien, imageName: Constants.randomImage)
         .environment(AvatarManager(service: MockAvatarService()))
+}
+
+#Preview("No Data") {
+    CategoryListView(path: .constant([]), category: .alien, imageName: Constants.randomImage)
+        .environment(AvatarManager(service: MockAvatarService(avatars: [])))
+}
+
+#Preview("Slow Loading") {
+    CategoryListView(path: .constant([]), category: .alien, imageName: Constants.randomImage)
+        .environment(AvatarManager(service: MockAvatarService(delay: 10)))
+}
+
+#Preview("Error View") {
+    CategoryListView(path: .constant([]), category: .alien, imageName: Constants.randomImage)
+        .environment(AvatarManager(service: MockAvatarService(showError: true)))
 }

@@ -13,9 +13,11 @@ struct ExploreView: View {
 
     @Environment(AvatarManager.self) private var avatarManager
 
-    @State private var featuredAvatars: [AvatarModel] = []
     @State private var categories: [CharacterOption] = CharacterOption.allCases
+    @State private var featuredAvatars: [AvatarModel] = []
     @State private var popularAvatars: [AvatarModel] = []
+    @State private var isLoadingPopular = true
+    @State private var isLoadingFeatured = true
 
     @State private var path: [NavigationPathOption] = []
 
@@ -26,9 +28,13 @@ struct ExploreView: View {
             List {
                 Group {
                     if featuredAvatars.isEmpty && popularAvatars.isEmpty {
-                        ProgressView()
-                            .padding(40)
-                            .frame(maxWidth: .infinity)
+                        ZStack {
+                            if isLoadingPopular && isLoadingFeatured {
+                                loadingIndicator
+                            } else {
+                                errorView
+                            }
+                        }
                     }
                     if !featuredAvatars.isEmpty {
                         featuredSection
@@ -37,7 +43,6 @@ struct ExploreView: View {
                         categoriesSection
                         popularSection
                     }
-
                 }
                 .removeListRowFormatting()
             }
@@ -52,6 +57,12 @@ struct ExploreView: View {
                 await loadPopularAvatars()
             }
         }
+    }
+
+    private var loadingIndicator: some View {
+        ProgressView()
+            .padding(40)
+            .frame(maxWidth: .infinity)
     }
 
     // MARK: - Featured Section
@@ -137,23 +148,53 @@ struct ExploreView: View {
         )
     }
 
+    // MARK: - Error View
+
+    private var errorView: some View {
+        VStack(alignment: .center, spacing: 8) {
+            Text("Error")
+                .font(.headline)
+            Text("Please check your internet connection and try again")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            Text("Try again")
+                .padding()
+                .tappableBackground()
+                .anyButton {
+                    onTryAgainPressed()
+                }
+                .tint(.blue)
+        }
+        .frame(maxWidth: .infinity)
+        .multilineTextAlignment(.center)
+        .padding(40)
+    }
+
     // MARK: - Data
 
     private func loadFeaturedAvatars() async {
         guard featuredAvatars.isEmpty else { return }
+        isLoadingFeatured = true
+        defer {
+            isLoadingFeatured = false
+        }
         do {
             featuredAvatars = try await avatarManager.getFeaturedAvatars()
         } catch {
-            print("Erro loading featured avatars: \(error)")
+            print("Error loading featured avatars: \(error)")
         }
     }
 
     private func loadPopularAvatars() async {
         guard popularAvatars.isEmpty else { return }
+        isLoadingPopular = true
+        defer {
+            isLoadingPopular = false
+        }
         do {
             popularAvatars = try await avatarManager.getPopularAvatars()
         } catch {
-            print("Erro loading popular avatars: \(error)")
+            print("Error loading popular avatars: \(error)")
         }
     }
 
@@ -166,11 +207,36 @@ struct ExploreView: View {
     private func onCategoryPressed(category: CharacterOption, imageName: String) {
         path.append(.category(category: category, imageName: imageName))
     }
+
+    private func onTryAgainPressed() {
+        Task {
+            await loadFeaturedAvatars()
+        }
+        Task {
+            await loadPopularAvatars()
+        }
+    }
 }
 
-#Preview {
+// MARK: - Previews
+
+#Preview("Has Data") {
     NavigationStack {
         ExploreView()
             .environment(AvatarManager(service: MockAvatarService()))
+    }
+}
+
+#Preview("No Data") {
+    NavigationStack {
+        ExploreView()
+            .environment(AvatarManager(service: MockAvatarService(avatars: [], delay: 1.0)))
+    }
+}
+
+#Preview("Slow Loading") {
+    NavigationStack {
+        ExploreView()
+            .environment(AvatarManager(service: MockAvatarService(delay: 10.0)))
     }
 }
