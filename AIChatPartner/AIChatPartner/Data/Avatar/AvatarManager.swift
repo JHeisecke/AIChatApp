@@ -48,10 +48,18 @@ class AvatarManager {
     }
 
     func getAvatars(byAuthor id: String) async throws -> [AvatarModel] {
-        try await remote.getAvatars(by: id)
+        try await remote.getAvatars(byAuthor: id)
     }
 
     func getAvatar(id: String) async throws -> AvatarModel {
         try await remote.getAvatar(id: id)
+    }
+
+    func removeAuthorIdFromAvatar(avatarId: String) async throws {
+        try await remote.removeAuthorIdFromAvatar(avatarId: avatarId)
+    }
+
+    func removeAuthorIdFromAllUserAvatars(authorId: String) async throws {
+        try await remote.removeAuthorIdFromAllUserAvatars(authorId: authorId)
     }
 }

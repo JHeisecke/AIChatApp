@@ -46,15 +46,35 @@ struct FirebaseAvatarService: RemoteAvatarService {
             .getDocuments(as: AvatarModel.self)
     }
 
-    func getAvatars(by author: String) async throws -> [AvatarModel] {
+    func getAvatars(byAuthor id: String) async throws -> [AvatarModel] {
         try await collection
-            .whereField(AvatarModel.CodingKeys.authorId.rawValue, isEqualTo: author)
+            .whereField(AvatarModel.CodingKeys.authorId.rawValue, isEqualTo: id)
             .order(by: AvatarModel.CodingKeys.dateCreated.rawValue, descending: true)
             .getDocuments(as: AvatarModel.self)
     }
 
     func getAvatar(id: String) async throws -> AvatarModel {
         try await collection.document(id).getDocument(as: AvatarModel.self)
+    }
+
+    func removeAuthorIdFromAvatar(avatarId: String) async throws {
+        try await collection.document(avatarId).updateData([
+            AvatarModel.CodingKeys.authorId.rawValue: NSNull()
+        ])
+    }
+
+    func removeAuthorIdFromAllUserAvatars(authorId: String) async throws {
+        let avatars = try await getAvatars(byAuthor: authorId)
+
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            group.addTask {
+                for avatar in avatars {
+                    try await removeAuthorIdFromAvatar(avatarId: avatar.avatarId)
+                }
+            }
+
+            try await group.waitForAll()
+        }
     }
 
     func incrementAvatarClickCount(avatarId: String) async throws {

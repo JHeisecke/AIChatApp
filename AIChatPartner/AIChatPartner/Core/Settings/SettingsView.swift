@@ -13,6 +13,7 @@ struct SettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(AuthManager.self) private var authManager
     @Environment(UserManager.self) private var userManager
+    @Environment(AvatarManager.self) private var avatarManager
 
     @State private var isPremium = true
     @State private var isAnonymousUser = true
@@ -172,8 +173,13 @@ struct SettingsView: View {
     private func onDeleteAccountConfirmed() {
         Task {
             do {
-                try await authManager.deleteAccount()
-                try await userManager.deleteCurrentUser()
+                let uid = try authManager.getAuthId()
+                async let deleteAuth: () = authManager.deleteAccount()
+                async let deleteUser: () = userManager.deleteCurrentUser()
+                async let deleteAvatars: () = avatarManager.removeAuthorIdFromAllUserAvatars(authorId: uid)
+
+                let (_, _, _) = await (try deleteAuth, try deleteUser, try deleteAvatars)
+
                 await dismissScreen()
             } catch {
                 showAlert = AnyAppAlert(error: error)
@@ -194,25 +200,28 @@ struct SettingsView: View {
 
 // MARK: - Preview
 
+#Preview("Authenticated") {
+    SettingsView()
+        .previewEnvironment()
+}
+
 #Preview("No Auth") {
     SettingsView()
+        .previewEnvironment()
         .environment(AuthManager(service: MockAuthService(user: nil)))
         .environment(UserManager(service: MockUserServices(user: nil)))
-        .environment(AppState())
 }
 
 #Preview("Anonymous") {
     SettingsView()
+        .previewEnvironment()
         .environment(AuthManager(service: MockAuthService(user: UserAuthInfo.mock(isAnonymous: true))))
-        .environment(UserManager(service: MockUserServices(user: .mock)))
-        .environment(AppState())
 }
 
 #Preview("Not Anonymous") {
     SettingsView()
+        .previewEnvironment()
         .environment(AuthManager(service: MockAuthService(user: UserAuthInfo.mock(isAnonymous: false))))
-        .environment(UserManager(service: MockUserServices(user: .mock)))
-        .environment(AppState())
 }
 
 // MARK: - View Extension

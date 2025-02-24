@@ -47,7 +47,7 @@ struct MockAvatarService: RemoteAvatarService {
         return avatars.shuffled()
     }
 
-    func getAvatars(by author: String) async throws -> [AvatarModel] {
+    func getAvatars(byAuthor id: String) async throws -> [AvatarModel] {
         try await Task.sleep(for: .seconds(delay))
         try tryShowError()
         return avatars.shuffled()
@@ -61,6 +61,14 @@ struct MockAvatarService: RemoteAvatarService {
     }
 
     func incrementAvatarClickCount(avatarId: String) async throws {
+        
+    }
+
+    func removeAuthorIdFromAvatar(avatarId: String) async throws {
+
+    }
+
+    func removeAuthorIdFromAllUserAvatars(authorId: String) async throws {
         
     }
 }

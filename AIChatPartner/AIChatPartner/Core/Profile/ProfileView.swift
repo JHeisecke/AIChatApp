@@ -17,8 +17,10 @@ struct ProfileView: View {
     @State private var showSettingsView: Bool = false
     @State private var showCreateAvatarView: Bool = false
     @State private var currentUser: UserModel?
-    @State private var myAvatars: [AvatarModel]?
+    @State private var myAvatars: [AvatarModel] = []
     @State private var isLoading = false
+    @State private var showAlert: AnyAppAlert?
+
     @State private var path: [NavigationPathOption] = []
 
     // MARK: - Body
@@ -53,6 +55,7 @@ struct ProfileView: View {
                 CreateAvatarView()
             }
         )
+        .showCustomAlert(alert: $showAlert)
         .task {
             isLoading = true
             await loadData()
@@ -72,7 +75,7 @@ struct ProfileView: View {
 
     private var myAvatarsSection: some View {
         Section {
-            if let myAvatars, !myAvatars.isEmpty {
+            if !myAvatars.isEmpty {
                 ForEach(myAvatars, id: \.self) { avatar in
                     CustomListCellView(
                         imageName: avatar.profileImageName,
@@ -144,7 +147,15 @@ struct ProfileView: View {
 
     private func onDeleteAvatar(indexSet: IndexSet) {
         guard let index = indexSet.first else { return }
-        myAvatars?.remove(at: index)
+        let avatar = myAvatars[index]
+        Task {
+            do {
+                try await avatarManager.removeAuthorIdFromAvatar(avatarId: avatar.avatarId)
+                myAvatars.remove(at: index)
+            } catch {
+                showAlert = AnyAppAlert(title: "Unable to delete avatar.", subtitle: "Please try again.")
+            }
+        }
     }
 
     private func onSettingsButtonPressed() {
