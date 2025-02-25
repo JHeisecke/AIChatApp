@@ -61,6 +61,19 @@ struct AvatarModel: Hashable, Codable {
     mutating func updateProfileImage(imageName: String) {
         profileImageName = imageName
     }
+
+    static func newAvatar(name: String, option: CharacterOption, action: CharacterAction, location: CharacterLocation, authorId: String) -> Self {
+        AvatarModel(
+            avatarId: UUID().uuidString,
+            name: name,
+            profileImageName: nil,
+            characterOption: option,
+            characterAction: action,
+            characterLocation: location,
+            authorId: authorId,
+            dateCreated: .now
+        )
+    }
 }
 
 // MARK: - Mocks

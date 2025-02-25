@@ -178,15 +178,12 @@ struct CreateAvatarView: View {
                 try TextValidationHelper.checkIfTextIsValid(text: avatarName)
                 let uid = try authManager.getAuthId()
 
-                let avatar = AvatarModel(
-                    avatarId: UUID().uuidString,
+                let avatar = AvatarModel.newAvatar(
                     name: avatarName,
-                    profileImageName: nil,
-                    characterOption: characterOption,
-                    characterAction: characterAction,
-                    characterLocation: characterLocation,
-                    authorId: uid,
-                    dateCreated: .now
+                    option: characterOption,
+                    action: characterAction,
+                    location: characterLocation,
+                    authorId: uid
                 )
 
                 try await avatarManager.createAvatar(avatar: avatar, image: generatedImage)
@@ -203,7 +200,5 @@ struct CreateAvatarView: View {
 
 #Preview {
     CreateAvatarView()
-        .environment(AIManager(service: MockAIService()))
-        .environment(AuthManager(service: MockAuthService(user: .mock())))
-        .environment(AvatarManager(service: MockAvatarService()))
+        .previewEnvironment()
 }
