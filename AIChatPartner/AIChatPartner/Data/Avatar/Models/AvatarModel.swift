@@ -82,29 +82,29 @@ extension AvatarModel {
     static var mocks: [AvatarModel] {
         [
             AvatarModel(
-                avatarId: UUID().uuidString,
+                avatarId: "mock_ava_1",
                 name: "Alpha",
                 profileImageName: Constants.randomImage,
                 characterOption: .woman,
                 characterAction: .crying,
                 characterLocation: .city,
-                authorId: UUID().uuidString,
+                authorId: UserAuthInfo.mock().uid,
                 dateCreated: .now,
                 clickCount: 10
             ),
             AvatarModel(
-                avatarId: UUID().uuidString,
+                avatarId: "mock_ava_2",
                 name: "Beta",
                 profileImageName: Constants.randomImage,
                 characterOption: .man,
                 characterAction: .smiling,
                 characterLocation: .forest,
-                authorId: UUID().uuidString,
+                authorId: UserAuthInfo.mock().uid,
                 dateCreated: .now,
                 clickCount: 100
             ),
             AvatarModel(
-                avatarId: UUID().uuidString,
+                avatarId: "mock_ava_3",
                 name: "Gamma",
                 profileImageName: Constants.randomImage,
                 characterOption: .dog,
@@ -115,7 +115,7 @@ extension AvatarModel {
                 clickCount: 9
             ),
             AvatarModel(
-                avatarId: UUID().uuidString,
+                avatarId: "mock_ava_4",
                 name: "Delta",
                 profileImageName: Constants.randomImage,
                 characterOption: .cat,
@@ -129,16 +129,6 @@ extension AvatarModel {
     }
     
     static var mock: AvatarModel {
-        AvatarModel(
-            avatarId: UUID().uuidString,
-            name: "Alpha",
-            profileImageName: Constants.randomImage,
-            characterOption: .woman,
-            characterAction: .crying,
-            characterLocation: .city,
-            authorId: UUID().uuidString,
-            dateCreated: .now,
-            clickCount: 1
-        )
+        AvatarModel.mocks[0]
     }
 }

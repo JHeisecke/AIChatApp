@@ -61,12 +61,17 @@ enum OpenAIError: LocalizedError {
     case invalidResponse
 }
 
-struct AIChatModel {
+struct AIChatModel: Codable {
     let role: Role
     let message: String
 
-    enum Role {
+    enum Role: String, Codable {
         case system, user, assistant, tool, developer
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case role
+        case message
     }
 }
 

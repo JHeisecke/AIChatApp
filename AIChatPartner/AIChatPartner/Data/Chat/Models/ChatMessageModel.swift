@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ChatMessageModel: Identifiable {
+struct ChatMessageModel: Identifiable, Codable {
     let id: String
     let chatId: String
     let authorId: String?
@@ -31,11 +31,24 @@ struct ChatMessageModel: Identifiable {
         self.dateCreated = dateCreated
     }
 
+    enum CodingKeys: String, CodingKey {
+        case id
+        case chatId = "chat_id"
+        case authorId = "author_id"
+        case content
+        case seenByIds = "seen_by_ids"
+        case dateCreated = "date_created"
+    }
+
     func hasBeenSeenBy(userId: String) -> Bool {
         guard let seenByIds else { return false }
         return seenByIds.contains(userId)
     }
+}
 
+// MARK: - Builders
+
+extension ChatMessageModel {
     static func newUserMessage(chatId: String, userId: String, message: AIChatModel) -> Self {
         ChatMessageModel(
             id: UUID().uuidString,
@@ -72,33 +85,33 @@ extension ChatMessageModel {
             ChatMessageModel(
                 id: "msg1",
                 chatId: "1",
-                authorId: "user1",
+                authorId: UserAuthInfo.mock().uid,
                 content: AIChatModel(role: .user, message: "Hello, how are you?"),
-                seenByIds: ["user2", "user3"],
+                seenByIds: [UserAuthInfo.mock().uid],
                 dateCreated: Date.now
             ),
             ChatMessageModel(
                 id: "msg2",
-                chatId: "2",
-                authorId: "user2",
+                chatId: "1",
+                authorId: AvatarModel.mock.avatarId,
                 content: AIChatModel(role: .assistant, message: "I'm doing well, thanks for asking!"),
-                seenByIds: ["user1"],
+                seenByIds: [UserAuthInfo.mock().uid],
                 dateCreated: Date.now(days: -5)
             ),
             ChatMessageModel(
                 id: "msg3",
-                chatId: "3",
-                authorId: "user3",
+                chatId: "1",
+                authorId: UserAuthInfo.mock().uid,
                 content: AIChatModel(role: .assistant, message: "Anyone up for a game tonight?"),
-                seenByIds: ["user1", "user2", "user4"],
+                seenByIds: [UserAuthInfo.mock().uid],
                 dateCreated: Date.now(hours: -1)
             ),
             ChatMessageModel(
                 id: "msg4",
                 chatId: "1",
-                authorId: "user1",
+                authorId: AvatarModel.mock.avatarId,
                 content: AIChatModel(role: .user, message: "Sure, count me in!"),
-                seenByIds: nil,
+                seenByIds: [],
                 dateCreated: Date.now(hours: -2)
             )
         ]

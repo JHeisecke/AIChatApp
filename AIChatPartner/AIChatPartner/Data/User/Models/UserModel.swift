@@ -77,7 +77,7 @@ extension UserModel {
     static var mocks: [Self] {
         [
             UserModel(
-                userId: "user_001",
+                userId: UserAuthInfo.mock().uid,
                 creationDate: Date.now(hours: -1),
                 didCompleteOnboarding: true,
                 profileColor: "#FF0000"
