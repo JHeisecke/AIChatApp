@@ -30,6 +30,12 @@ struct FirebaseChatService: ChatService {
         return try await collection.document(ChatModel.chatId(userId: userId, avatarId: avatarId)).getDocument(as: ChatModel.self)
     }
 
+    func getAllChats(userId: String) async throws -> [ChatModel] {
+        return try await collection
+            .whereField(ChatModel.CodingKeys.userId.rawValue, isEqualTo: userId)
+            .getDocuments(as: ChatModel.self)
+    }
+
     func addChatMessage(message: ChatMessageModel) async throws {
         try messagesCollection(chatId: message.chatId).document(message.id).setData(from: message, merge: true)
         try await updateChat(message.chatId, values: [
@@ -56,6 +62,14 @@ struct FirebaseChatService: ChatService {
                 }
             }
         }
+    }
+
+    func getLastChatMessage(chatId: String) async throws -> ChatMessageModel? {
+        try await messagesCollection(chatId: chatId)
+            .order(by: ChatMessageModel.CodingKeys.dateCreated.rawValue, descending: true)
+            .limit(to: 1)
+            .getDocuments(as: ChatMessageModel.self)
+            .first
     }
 
     private func updateChat(_ id: String, values: [String: Any]) async throws {

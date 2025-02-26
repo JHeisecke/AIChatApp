@@ -48,29 +48,29 @@ extension ChatModel {
         [
             ChatModel(
                 id: "mock-1",
-                userId: "user1",
-                avatarId: "avatar1",
+                userId: UserAuthInfo.mock().uid,
+                avatarId: AvatarModel.mocks.randomElement()!.avatarId,
                 dateCreated: Date.now(days: -1, hours: 0),
                 dateModified: Date.now(hours: -12)
             ),
             ChatModel(
                 id: "mock-2",
-                userId: "user2",
-                avatarId: "avatar2",
+                userId: UserAuthInfo.mock().uid,
+                avatarId: AvatarModel.mocks.randomElement()!.avatarId,
                 dateCreated: Date.now(days: -2, hours: 0),
                 dateModified: Date.now(hours: -18)
             ),
             ChatModel(
                 id: "mock-3",
-                userId: "user3",
-                avatarId: "avatar3",
+                userId: UserAuthInfo.mock().uid,
+                avatarId: AvatarModel.mocks.randomElement()!.avatarId,
                 dateCreated: Date.now(days: -3, hours: 0),
                 dateModified: Date.now(hours: -24)
             ),
             ChatModel(
                 id: "mock-4",
-                userId: "user4",
-                avatarId: "avatar4",
+                userId: UserAuthInfo.mock().uid,
+                avatarId: AvatarModel.mocks.randomElement()!.avatarId,
                 dateCreated: Date.now(days: -4, hours: 0),
                 dateModified: Date.now(hours: -30)
             )

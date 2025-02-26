@@ -39,7 +39,8 @@ struct ChatRowCellView: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            
+            .lineLimit(1)
+
             if hasNewChat {
                 Text("NEW")
                     .badgeLabel()
