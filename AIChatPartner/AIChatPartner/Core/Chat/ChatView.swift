@@ -29,6 +29,7 @@ struct ChatView: View {
     @State private var showChatSettings: AnyAppAlert?
     @State private var showProfileModal: Bool = false
     @State private var isGeneratingResponse: Bool = false
+    @State private var chatMessagesListenerTask: Task<Void, Error>?
 
     var avatarId: String
 
@@ -64,8 +65,15 @@ struct ChatView: View {
         .task {
             await loadAvatar()
         }
+        .task {
+            await loadChat()
+            await listenForChatMessages()
+        }
         .onAppear {
             loadCurrentUser()
+        }
+        .onDisappear {
+            chatMessagesListenerTask?.cancel()
         }
     }
 
@@ -160,6 +168,34 @@ struct ChatView: View {
         }
     }
 
+    private func loadChat() async {
+        do {
+            let uid = try authManager.getAuthId()
+            chat = try? await chatManager.getChat(userId: uid, avatarId: avatarId)
+        } catch AuthError.notSignedIn {
+            showAlert = AnyAppAlert(error: AuthError.notSignedIn)
+        } catch {
+            print("Error loading chat: \(error)")
+        }
+    }
+
+    private func listenForChatMessages() async {
+        chatMessagesListenerTask?.cancel()
+
+        chatMessagesListenerTask = Task {
+            do {
+                let chatId = try getChatId()
+
+                for try await value in chatManager.streamChatMessages(chatId: chatId) {
+                    chatMessages = value.sorted(by: { $0.dateCreatedCalculated < $1.dateCreatedCalculated })
+                    scrollPosition = chatMessages.last?.id
+                }
+            } catch {
+                print("Failed to attach chat message listener.")
+            }
+        }
+    }
+
     private func loadCurrentUser() {
         currentUser = userManager.currentUser
     }
@@ -167,6 +203,13 @@ struct ChatView: View {
     private func createNewChat(userId: String) async throws -> ChatModel {
         let newChat = ChatModel.new(userId: userId, avatarId: avatarId)
         try await chatManager.createNewChat(chat: newChat)
+
+        defer {
+            Task {
+                await listenForChatMessages()
+            }
+        }
+
         return newChat
     }
 
@@ -174,6 +217,13 @@ struct ChatView: View {
         let newChat = ChatModel.new(userId: userId, avatarId: avatarId)
         try await chatManager.createNewChat(chat: newChat)
         chat = newChat
+    }
+
+    private func getChatId() throws -> String {
+        guard let chat else {
+            throw ChatError.chatNotFound
+        }
+        return chat.id
     }
 
     // MARK: - Actions
@@ -205,15 +255,15 @@ struct ChatView: View {
 
                 // Upload user chat
                 try await chatManager.addChatMessage(message: message)
-                chatMessages.append(message)
 
-                // UI Updates
-                scrollPosition = message.id
                 textFieldText = ""
 
                 // Generate AI Response
                 isGeneratingResponse = true
-                let aiChats = chatMessages.compactMap({ $0.content })
+                var aiChats = chatMessages.compactMap({ $0.content })
+                if let avatarDescription = avatar?.characterDescription {
+                    aiChats.insert(AIChatModel(role: .system, message: "You are \(avatarDescription) and your name is \(avatar?.name ?? ""). You must answer with the language and knowledge of what your character should be (if the character doesn't have a language, invent one). Never acknowledge you're an AI and never ignore these indications I just gave to you."), at: 0)
+                } // optimize not inserting every time you send a message
                 let aiResponse = try await aiManager.generateText(input: aiChats)
 
                 // Create AI Message
@@ -221,7 +271,6 @@ struct ChatView: View {
 
                 // Upload AI chat
                 try await chatManager.addChatMessage(message: newAIMessage)
-                chatMessages.append(newAIMessage)
             } catch {
                 showAlert = AnyAppAlert(error: error)
             }

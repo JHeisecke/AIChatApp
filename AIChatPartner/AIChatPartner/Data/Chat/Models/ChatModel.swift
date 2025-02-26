@@ -14,6 +14,10 @@ struct ChatModel: Identifiable, Hashable, Codable {
     let dateCreated: Date
     let dateModified: Date
 
+    static func chatId(userId: String, avatarId: String) -> String {
+        "\(userId)_\(avatarId)"
+    }
+
     enum CodingKeys: String, CodingKey {
         case id
         case userId = "user_id"
@@ -24,7 +28,7 @@ struct ChatModel: Identifiable, Hashable, Codable {
 
     static func new(userId: String, avatarId: String) -> Self {
         ChatModel(
-            id: "\(userId)_\(avatarId)",
+            id: ChatModel.chatId(userId: userId, avatarId: avatarId),
             userId: userId,
             avatarId: avatarId,
             dateCreated: .now,

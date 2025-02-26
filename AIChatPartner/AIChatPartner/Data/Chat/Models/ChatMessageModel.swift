@@ -15,6 +15,10 @@ struct ChatMessageModel: Identifiable, Codable {
     let seenByIds: [String]?
     let dateCreated: Date?
 
+    var dateCreatedCalculated: Date {
+        dateCreated ?? .distantPast
+    }
+
     init(
         id: String,
         chatId: String,
