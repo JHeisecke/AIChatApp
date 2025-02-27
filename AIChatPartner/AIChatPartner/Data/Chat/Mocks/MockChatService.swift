@@ -54,9 +54,20 @@ struct MockChatService: ChatService {
         
     }
 
+    func deleteChat(chatId: String) async throws {
+    }
+
     func getLastChatMessage(chatId: String) async throws -> ChatMessageModel? {
         try await Task.sleep(for: .seconds(delay))
         try tryShowError()
         return .mock
+    }
+
+    func deleteAllChatsForUser(userId: String) async throws {
+
+    }
+
+    func reportChat(report: ChatReportModel) throws {
+        
     }
 }

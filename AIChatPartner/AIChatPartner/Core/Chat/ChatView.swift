@@ -10,7 +10,7 @@ import SwiftUI
 struct ChatView: View {
 
     // MARK: - Properties
-
+    @Environment(\.dismiss) private var dismiss
     @Environment(AvatarManager.self) private var avatarManager
     @Environment(AuthManager.self) private var authManager
     @Environment(UserManager.self) private var userManager
@@ -228,6 +228,38 @@ struct ChatView: View {
 
     // MARK: - Actions
 
+    private func onReportChatPressed() {
+        do {
+            let chatId = try getChatId()
+            let uid = try authManager.getAuthId()
+            try chatManager.reportChat(chatId: chatId, reportingUserId: uid, reportedAvatarId: avatarId)
+            showAlert = AnyAppAlert(
+                title: "Report sent!",
+                subtitle: "We'll review the chat shortly."
+            )
+        } catch {
+            showAlert = AnyAppAlert(
+                title: "Something went wrong.",
+                subtitle: "Please try again later."
+            )
+        }
+    }
+
+    private func onDeleteChatPressed() {
+        Task {
+            do {
+                let chatId = try getChatId()
+                try await chatManager.deleteChat(chatId: chatId)
+                dismiss()
+            } catch {
+                showAlert = AnyAppAlert(
+                    title: "Something went wrong.",
+                    subtitle: "Please try again later."
+                )
+            }
+        }
+    }
+
     private func onSendMessagePressed() {
         let text = textFieldText
 
@@ -286,10 +318,10 @@ struct ChatView: View {
                 AnyView(
                     Group {
                         Button("Report User / Chat", role: .destructive) {
-
+                            onReportChatPressed()
                         }
                         Button("Delete Chat", role: .destructive) {
-
+                            onDeleteChatPressed()
                         }
                     }
                 )

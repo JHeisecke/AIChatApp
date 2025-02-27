@@ -39,4 +39,16 @@ class ChatManager {
     func streamChatMessages(chatId: String) -> AsyncThrowingStream<[ChatMessageModel], Error> {
         service.streamChatMessages(chatId: chatId)
     }
+
+    func deleteChat(chatId: String) async throws {
+        try await service.deleteChat(chatId: chatId)
+    }
+
+    func deleteAllChatsForUser(userId: String) async throws {
+        try await service.deleteAllChatsForUser(userId: userId)
+    }
+
+    func reportChat(chatId: String, reportingUserId: String, reportedAvatarId: String) throws {
+        try service.reportChat(report: ChatReportModel.new(chatId: chatId, reportedAvatarId: reportedAvatarId, reportingUserId: reportingUserId))
+    }
 }

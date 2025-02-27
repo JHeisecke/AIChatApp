@@ -18,6 +18,10 @@ struct FirebaseChatService: ChatService {
         collection.document(chatId).collection("messages")
     }
 
+    private func reportsCollection(chatId: String) -> CollectionReference {
+        collection.document(chatId).collection("chats_reports")
+    }
+
     func createNewChat(chat: ChatModel) async throws {
         do {
             try collection.document(chat.id).setData(from: chat, merge: true)
@@ -70,6 +74,30 @@ struct FirebaseChatService: ChatService {
             .limit(to: 1)
             .getDocuments(as: ChatMessageModel.self)
             .first
+    }
+
+    func deleteChat(chatId: String) async throws {
+        async let chatDeletion: Void = collection.document(chatId).delete()
+        async let messagesDeletion: Void = messagesCollection(chatId: chatId).document().delete()
+
+        let (_, _) = try (await chatDeletion, await messagesDeletion)
+    }
+
+    func deleteAllChatsForUser(userId: String) async throws {
+        let allChats = try await getAllChats(userId: userId)
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            group.addTask {
+                for chat in allChats {
+                    try await deleteChat(chatId: chat.id)
+                }
+            }
+
+            try await group.waitForAll()
+        }
+    }
+
+    func reportChat(report: ChatReportModel)  throws {
+        try reportsCollection(chatId: report.chatId).document(report.id).setData(from: report, merge: true)
     }
 
     private func updateChat(_ id: String, values: [String: Any]) async throws {
