@@ -9,7 +9,14 @@ import SwiftUI
 
 struct ChatView: View {
 
+    // MARK: - Types
+
+    struct Constants {
+        static let timeThresholdBetweenMessages: TimeInterval = 3600 // 60 minutes
+    }
+
     // MARK: - Properties
+
     @Environment(\.dismiss) private var dismiss
     @Environment(AvatarManager.self) private var avatarManager
     @Environment(AuthManager.self) private var authManager
@@ -83,6 +90,9 @@ struct ChatView: View {
         ScrollView {
             LazyVStack(spacing: 24) {
                 ForEach(chatMessages) { message in
+                    if messageIsDelayed(message) {
+                        dateSeparator(with: message.dateCreatedCalculated)
+                    }
                     bubbleBuilder(message, isCurrentUser: message.authorId == currentUser?.userId)
                 }
             }
@@ -94,6 +104,7 @@ struct ChatView: View {
         .scrollPosition(id: $scrollPosition, anchor: .center)
         .animation(.default, value: chatMessages.count)
         .animation(.default, value: scrollPosition)
+        .scrollIndicators(.hidden)
     }
 
     private func bubbleBuilder(_ message: ChatMessageModel, isCurrentUser: Bool) -> some View {
@@ -105,6 +116,9 @@ struct ChatView: View {
             onImagePressed: onAvatarImagePressed
         )
         .id(message.id)
+        .onAppear {
+            onMessageRead(message)
+        }
     }
 
     // MARK: TextField
@@ -139,6 +153,18 @@ struct ChatView: View {
             .background(Color(uiColor: .secondarySystemBackground))
     }
 
+    private func dateSeparator(with date: Date) -> some View {
+        Group {
+            Text(date.formatted(date: .abbreviated, time: .omitted))
+            +
+            Text(" • ")
+            +
+            Text(date.formatted(date: .omitted, time: .shortened))
+        }
+        .foregroundStyle(.secondary)
+        .font(.callout)
+    }
+
     // MARK: Modal
 
     private func profileModal(avatar: AvatarModel) -> some View {
@@ -156,6 +182,20 @@ struct ChatView: View {
     }
 
     // MARK: - Data
+
+    private func messageIsDelayed(_ message: ChatMessageModel) -> Bool {
+        let currentMessageDate = message.dateCreatedCalculated
+
+        guard let index = chatMessages.firstIndex(where: { $0.id == message.id }),
+              chatMessages.indices.contains(index - 1) else {
+            return true
+        }
+
+        let previousMessageDate = chatMessages[index - 1].dateCreatedCalculated
+        let timeDiff = currentMessageDate.timeIntervalSince(previousMessageDate)
+
+        return timeDiff > Constants.timeThresholdBetweenMessages
+    }
 
     private func loadAvatar() async {
         do {
@@ -227,6 +267,21 @@ struct ChatView: View {
     }
 
     // MARK: - Actions
+
+    private func onMessageRead(_ message: ChatMessageModel) {
+        Task {
+            do {
+                let uid = try authManager.getAuthId()
+                let chatId = try getChatId()
+                guard !message.hasBeenSeenBy(userId: uid) else {
+                    return
+                }
+                try await chatManager.markChatMessageAsSeen(chatId: chatId, userId: uid, messageId: message.id)
+            } catch {
+                print("Failed to mark message as seen")
+            }
+        }
+    }
 
     private func onReportChatPressed() {
         do {

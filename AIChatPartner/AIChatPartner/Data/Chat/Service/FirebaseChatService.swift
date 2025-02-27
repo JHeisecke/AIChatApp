@@ -100,6 +100,12 @@ struct FirebaseChatService: ChatService {
         try reportsCollection(chatId: report.chatId).document(report.id).setData(from: report, merge: true)
     }
 
+    func markChatMessageAsSeen(chatId: String, userId: String, messageId: String) async throws {
+        try await messagesCollection(chatId: chatId).document(messageId).updateData([
+            ChatMessageModel.CodingKeys.seenByIds.rawValue: FieldValue.arrayUnion([userId])
+        ])
+    }
+
     private func updateChat(_ id: String, values: [String: Any]) async throws {
         try await collection.document(id).updateData(values)
     }

@@ -47,30 +47,30 @@ extension ChatModel {
     static var mocks: [Self] {
         [
             ChatModel(
-                id: "mock-1",
+                id: ChatModel.chatId(userId: UserAuthInfo.mock().uid, avatarId: AvatarModel.mock.avatarId),
                 userId: UserAuthInfo.mock().uid,
-                avatarId: AvatarModel.mocks.randomElement()!.avatarId,
+                avatarId: AvatarModel.mock.avatarId,
                 dateCreated: Date.now(days: -1, hours: 0),
                 dateModified: Date.now(hours: -12)
             ),
             ChatModel(
-                id: "mock-2",
+                id: ChatModel.chatId(userId: UserAuthInfo.mock().uid, avatarId: AvatarModel.mocks.last!.avatarId),
                 userId: UserAuthInfo.mock().uid,
-                avatarId: AvatarModel.mocks.randomElement()!.avatarId,
+                avatarId: AvatarModel.mocks.last!.avatarId,
                 dateCreated: Date.now(days: -2, hours: 0),
                 dateModified: Date.now(hours: -18)
             ),
             ChatModel(
-                id: "mock-3",
+                id: ChatModel.chatId(userId: UserAuthInfo.mock().uid, avatarId: AvatarModel.mocks[2].avatarId),
                 userId: UserAuthInfo.mock().uid,
-                avatarId: AvatarModel.mocks.randomElement()!.avatarId,
+                avatarId: AvatarModel.mocks[2].avatarId,
                 dateCreated: Date.now(days: -3, hours: 0),
                 dateModified: Date.now(hours: -24)
             ),
             ChatModel(
-                id: "mock-4",
+                id: ChatModel.chatId(userId: UserAuthInfo.mock().uid, avatarId: AvatarModel.mocks[3].avatarId),
                 userId: UserAuthInfo.mock().uid,
-                avatarId: AvatarModel.mocks.randomElement()!.avatarId,
+                avatarId: AvatarModel.mocks[3].avatarId,
                 dateCreated: Date.now(days: -4, hours: 0),
                 dateModified: Date.now(hours: -30)
             )

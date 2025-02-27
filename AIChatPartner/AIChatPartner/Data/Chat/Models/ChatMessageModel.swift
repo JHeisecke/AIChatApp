@@ -88,7 +88,7 @@ extension ChatMessageModel {
         return [
             ChatMessageModel(
                 id: "msg1",
-                chatId: "1",
+                chatId: ChatModel.mock.id,
                 authorId: AvatarModel.mock.avatarId,
                 content: AIChatModel(role: .assistant, message: "Hello, how are you?"),
                 seenByIds: [UserAuthInfo.mock().uid],
@@ -96,7 +96,7 @@ extension ChatMessageModel {
             ),
             ChatMessageModel(
                 id: "msg2",
-                chatId: "1",
+                chatId: ChatModel.mock.id,
                 authorId: AvatarModel.mock.avatarId,
                 content: AIChatModel(role: .assistant, message: "I'm doing well, thanks for asking!"),
                 seenByIds: [UserAuthInfo.mock().uid],
@@ -104,7 +104,7 @@ extension ChatMessageModel {
             ),
             ChatMessageModel(
                 id: "msg3",
-                chatId: "2",
+                chatId: ChatModel.mocks.shuffled().first!.id,
                 authorId: UserAuthInfo.mock().uid,
                 content: AIChatModel(role: .user, message: "Anyone up for a game tonight?"),
                 seenByIds: [UserAuthInfo.mock().uid],
@@ -112,7 +112,7 @@ extension ChatMessageModel {
             ),
             ChatMessageModel(
                 id: "msg4",
-                chatId: "3",
+                chatId: ChatModel.mocks.shuffled().first!.id,
                 authorId: UserAuthInfo.mock().uid,
                 content: AIChatModel(role: .user, message: "Sure, count me in!"),
                 seenByIds: [],

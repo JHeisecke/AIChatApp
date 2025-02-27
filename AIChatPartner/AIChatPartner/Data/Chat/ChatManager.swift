@@ -51,4 +51,8 @@ class ChatManager {
     func reportChat(chatId: String, reportingUserId: String, reportedAvatarId: String) throws {
         try service.reportChat(report: ChatReportModel.new(chatId: chatId, reportedAvatarId: reportedAvatarId, reportingUserId: reportingUserId))
     }
+
+    func markChatMessageAsSeen(chatId: String, userId: String, messageId: String) async throws {
+        try await service.markChatMessageAsSeen(chatId: chatId, userId: userId, messageId: messageId)
+    }
 }

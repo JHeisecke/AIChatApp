@@ -7,14 +7,15 @@
 
 import Foundation
 
-struct MockChatService: ChatService {
+@MainActor
+class MockChatService: ChatService {
 
     let chats: [ChatModel]
-    let messages: [ChatMessageModel]
+    @Published var messages: [ChatMessageModel]
     let delay: Double
     let showError: Bool
 
-    init(chats: [ChatModel] = ChatModel.mocks, messages: [ChatMessageModel] = [], delay: Double = 0.0, showError: Bool = false) {
+    init(chats: [ChatModel] = ChatModel.mocks, messages: [ChatMessageModel] = ChatMessageModel.mocks, delay: Double = 0.0, showError: Bool = false) {
         self.messages = messages
         self.chats = chats
         self.delay = delay
@@ -47,11 +48,17 @@ struct MockChatService: ChatService {
     func streamChatMessages(chatId: String) -> AsyncThrowingStream<[ChatMessageModel], Error> {
         AsyncThrowingStream { continuation in
             continuation.yield(messages)
+
+            Task {
+                for await value in $messages.values {
+                    continuation.yield(value)
+                }
+            }
         }
     }
 
     func addChatMessage(message: ChatMessageModel) async throws {
-        
+        messages.append(message)
     }
 
     func deleteChat(chatId: String) async throws {
@@ -68,6 +75,10 @@ struct MockChatService: ChatService {
     }
 
     func reportChat(report: ChatReportModel) throws {
+        
+    }
+
+    func markChatMessageAsSeen(chatId: String, userId: String, messageId: String) async throws {
         
     }
 }
