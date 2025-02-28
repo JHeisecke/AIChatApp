@@ -20,6 +20,15 @@ struct ExploreView: View {
     @State private var isLoadingFeatured = true
 
     @State private var path: [NavigationPathOption] = []
+    @State private var showDevSettings: Bool = false
+
+    private var showDevSettingsButton: Bool {
+        #if DEBUG
+        return true
+        #else
+        return false
+        #endif
+    }
 
     // MARK: - Body
 
@@ -49,6 +58,16 @@ struct ExploreView: View {
             .navigationTitle(
                 "Explore"
             )
+            .toolbar {
+                if showDevSettingsButton {
+                    ToolbarItem(placement: .topBarLeading) {
+                        devSettingsButton
+                    }
+                }
+            }
+            .sheet(isPresented: $showDevSettings, content: {
+                DevSettingsView()
+            })
             .navigationDestionationForCoreModule(path: $path)
             .task {
                 await loadFeaturedAvatars()
@@ -63,6 +82,20 @@ struct ExploreView: View {
         ProgressView()
             .padding(40)
             .frame(maxWidth: .infinity)
+    }
+
+    // MARK: - Dev Settings
+
+    private var devSettingsButton: some View {
+        Text("DEV")
+            .badgeLabel()
+            .anyButton {
+                onDevSettingsPressed()
+            }
+    }
+
+    private func onDevSettingsPressed() {
+        showDevSettings = true
     }
 
     // MARK: - Featured Section

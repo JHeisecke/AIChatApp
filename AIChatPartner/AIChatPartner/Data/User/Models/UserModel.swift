@@ -67,7 +67,24 @@ struct UserModel: Codable {
         }
         return Color(hex: profileColor)
     }
+
+    var eventParameters: [String: Any] {
+        let dict: [String: Any?] = [
+            "user_\(CodingKeys.userId.rawValue)": userId,
+            "user_\(CodingKeys.email.rawValue)": email,
+            "user_\(CodingKeys.isAnonymous.rawValue)": isAnonymous,
+            "user_\(CodingKeys.creationDate.rawValue)": creationDate,
+            "user_\(CodingKeys.lastSignInDate.rawValue)": lastSignInDate,
+            "user_\(CodingKeys.creationVersion.rawValue)": creationVersion,
+            "user_\(CodingKeys.didCompleteOnboarding.rawValue)": didCompleteOnboarding,
+            "user_\(CodingKeys.profileColor.rawValue)": profileColor
+        ]
+
+        return dict.compactMapValues({ $0 })
+    }
 }
+
+// MARK: - Mocks
 
 extension UserModel {
     static var mock: Self {
