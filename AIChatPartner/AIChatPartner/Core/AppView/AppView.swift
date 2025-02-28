@@ -33,6 +33,7 @@ struct AppView: View {
                 await checkUserStatus()
             }
         }
+        .colorScheme(.light)
     }
 
     private func checkUserStatus() async {
