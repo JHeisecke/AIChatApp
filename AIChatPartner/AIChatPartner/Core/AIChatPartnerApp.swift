@@ -23,6 +23,7 @@ struct AIChatPartnerApp: App {
                 .environment(delegate.dependencies.userManager)
                 .environment(delegate.dependencies.authManager)
                 .environment(delegate.dependencies.chatManager)
+                .environment(delegate.dependencies.logManager)
         }
     }
 }
@@ -77,6 +78,7 @@ struct Dependencies {
     let aiManager: AIManager!
     let avatarManager: AvatarManager!
     let chatManager: ChatManager!
+    let logManager: LogManager!
 
     init(config: BuildConfiguration) {
 
@@ -87,18 +89,25 @@ struct Dependencies {
             self.aiManager = AIManager(service: MockAIService())
             self.avatarManager = AvatarManager(service: MockAvatarService(), local: MockLocalAvatarPersistance())
             self.chatManager = ChatManager(service: MockChatService())
+            self.logManager = LogManager(services: [
+                ConsoleService()
+            ])
         case .dev:
             self.authManager = AuthManager(service: FirebaseAuthService())
             self.userManager = UserManager(service: ProductionUserServices())
             self.aiManager = AIManager(service: OpenAIService())
             self.avatarManager = AvatarManager(service: FirebaseAvatarService(), local: SwiftDataLocalAvatarPersistence())
             self.chatManager = ChatManager(service: FirebaseChatService())
+            self.logManager = LogManager(services: [
+                ConsoleService()
+            ])
         case .prod:
             self.authManager = AuthManager(service: FirebaseAuthService())
             self.userManager = UserManager(service: ProductionUserServices())
             self.aiManager = AIManager(service: OpenAIService())
             self.avatarManager = AvatarManager(service: FirebaseAvatarService(), local: SwiftDataLocalAvatarPersistence())
             self.chatManager = ChatManager(service: FirebaseChatService())
+            self.logManager = LogManager(services: [])
         }
     }
 }
@@ -114,5 +123,6 @@ extension View {
             .environment(AvatarManager(service: MockAvatarService()))
             .environment(AIManager(service: MockAIService()))
             .environment(ChatManager(service: MockChatService()))
+            .environment(LogManager(services: []))
     }
 }

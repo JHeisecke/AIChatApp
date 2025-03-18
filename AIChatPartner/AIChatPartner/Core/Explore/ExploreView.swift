@@ -256,7 +256,7 @@ struct ExploreView: View {
 #Preview("Has Data") {
     NavigationStack {
         ExploreView()
-            .environment(AvatarManager(service: MockAvatarService()))
+            .previewEnvironment()
     }
 }
 
@@ -264,6 +264,7 @@ struct ExploreView: View {
     NavigationStack {
         ExploreView()
             .environment(AvatarManager(service: MockAvatarService(avatars: [], delay: 1.0)))
+            .previewEnvironment()
     }
 }
 
@@ -271,5 +272,6 @@ struct ExploreView: View {
     NavigationStack {
         ExploreView()
             .environment(AvatarManager(service: MockAvatarService(delay: 10.0)))
+            .previewEnvironment()
     }
 }
