@@ -90,7 +90,7 @@ struct Dependencies {
             self.avatarManager = AvatarManager(service: MockAvatarService(), local: MockLocalAvatarPersistance())
             self.chatManager = ChatManager(service: MockChatService())
             self.logManager = LogManager(services: [
-                ConsoleService()
+                ConsoleService(printParameters: false)
             ])
         case .dev:
             self.authManager = AuthManager(service: FirebaseAuthService())
@@ -99,7 +99,7 @@ struct Dependencies {
             self.avatarManager = AvatarManager(service: FirebaseAvatarService(), local: SwiftDataLocalAvatarPersistence())
             self.chatManager = ChatManager(service: FirebaseChatService())
             self.logManager = LogManager(services: [
-                ConsoleService()
+                ConsoleService(printParameters: true)
             ])
         case .prod:
             self.authManager = AuthManager(service: FirebaseAuthService())
