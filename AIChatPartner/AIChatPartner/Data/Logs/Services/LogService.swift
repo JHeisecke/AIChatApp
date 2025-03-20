@@ -9,7 +9,7 @@ import Foundation
 
 protocol LogService {
     func identifyUser(userId: String, email: String?)
-    func addUserProperties(dict: [String: Any])
+    func addUserProperties(dict: [String: Any], isHighPriority: Bool)
     func deleteUserProfile()
 
     func trackEvent(event: LoggableEvent)

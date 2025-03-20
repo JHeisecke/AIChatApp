@@ -93,11 +93,7 @@ struct DevSettingsView: View {
         HStack {
             Text(item.key)
             Spacer(minLength: 4)
-            if let value = item.value as? Date {
-                Text(value.formatted())
-            } else {
-                Text(String(describing: item.value))
-            }
+            Text(String.toString(item.value) ?? "Unknown")
         }
         .font(.caption)
         .lineLimit(1)

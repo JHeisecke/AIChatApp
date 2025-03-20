@@ -38,6 +38,7 @@ struct AppView: View {
     }
 
     private func checkUserStatus() async {
+        logManager.trackEvent(event: AnyLogabbleEvent(eventName: "Hello"))
         if let user = authManager.auth {
             do {
                 try await userManager.logIn(auth: user, isNewUser: false)
@@ -63,10 +64,7 @@ struct AppView: View {
 
 #Preview {
     AppView(appState: AppState(showTabBar: true))
-        .environment(UserManager(service: MockUserServices(user: .mock)))
-        .environment(UserManager(service: MockUserServices(user: .mock)))
-        .environment(AuthManager(service: MockAuthService(user: .mock())))
-        .environment(LogManager(services: [ConsoleService()]))
+        .previewEnvironment()
 }
 
 #Preview {

@@ -20,7 +20,6 @@ class UserManager {
         self.remote = service.remote
         self.local = service.local
         self.currentUser = local.getCurrentUser()
-        print("LOADED CURRENT USER ON LAUNCH: \(currentUser?.userId ?? "nil")")
         print(NSHomeDirectory())
     }
 

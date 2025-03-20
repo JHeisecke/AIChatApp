@@ -22,15 +22,15 @@ class LogManager {
         }
     }
 
-    func addUserProperties(dict: [String: Any]) {
+    func addUserProperties(dict: [String: Any], isHighPriority: Bool = false) {
         for service in services {
-            service.addUserProperties(dict: dict)
+            service.addUserProperties(dict: dict, isHighPriority: isHighPriority)
         }
     }
 
     func deleteUserProfile() {
         for service in services {
-            service.deleteUserProfile()
+            service.deleteUserProfile() 
         }
     }
 

@@ -12,6 +12,7 @@ struct ExploreView: View {
     // MARK: - Properties
 
     @Environment(AvatarManager.self) private var avatarManager
+    @Environment(LogManager.self) private var logManager
 
     @State private var categories: [CharacterOption] = CharacterOption.allCases
     @State private var featuredAvatars: [AvatarModel] = []
@@ -238,6 +239,7 @@ struct ExploreView: View {
     }
 
     private func onCategoryPressed(category: CharacterOption, imageName: String) {
+        logManager.trackScreenEvent(event: AnyLogabbleEvent(eventName: "category_\(category.plural)"))
         path.append(.category(category: category, imageName: imageName))
     }
 
