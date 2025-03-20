@@ -26,7 +26,6 @@ struct FirebaseAnalyticsService: LogService {
                 Analytics.setUserProperty(cleanString, forName: cleanKey)
             }
         }
-
     }
     
     func deleteUserProfile() {

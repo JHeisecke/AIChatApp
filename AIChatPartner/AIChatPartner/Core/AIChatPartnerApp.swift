@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Mixpanel
 import FirebaseCore
 
 // MARK: - AIChatPartnerApp
@@ -99,7 +100,7 @@ struct Dependencies {
             self.avatarManager = AvatarManager(service: FirebaseAvatarService(), local: SwiftDataLocalAvatarPersistence())
             self.chatManager = ChatManager(service: FirebaseChatService())
             self.logManager = LogManager(services: [
-                ConsoleService(), FirebaseAnalyticsService()
+                ConsoleService(), FirebaseAnalyticsService(), MixpanelService(token: Keys.mixpanelKey)
             ])
         case .prod:
             self.authManager = AuthManager(service: FirebaseAuthService())
@@ -107,7 +108,7 @@ struct Dependencies {
             self.aiManager = AIManager(service: OpenAIService())
             self.avatarManager = AvatarManager(service: FirebaseAvatarService(), local: SwiftDataLocalAvatarPersistence())
             self.chatManager = ChatManager(service: FirebaseChatService())
-            self.logManager = LogManager(services: [FirebaseAnalyticsService()])
+            self.logManager = LogManager(services: [FirebaseAnalyticsService(), MixpanelService(token: Keys.mixpanelKey)])
         }
     }
 }
